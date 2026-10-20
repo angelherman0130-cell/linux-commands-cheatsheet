@@ -133,6 +133,8 @@ else
   echo "    export PATH=\"\$PATH:$BIN_HOME\""
 fi
 info "También aparecerá en el menú de aplicaciones como «Comandos Linux»."
+aviso "Si no la ves enseguida, reinicia sesión (algunos lanzadores solo leen las"
+aviso "entradas de menú al arrancar)."
 echo
 
 "$BIN_HOME/comandos-linux" --version 2>/dev/null || true

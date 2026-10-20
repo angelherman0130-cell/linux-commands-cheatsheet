@@ -45,6 +45,11 @@ El instalador detecta tu distribución, instala las dependencias que falten
 (solo pide `sudo` si de verdad son necesarias), deja el comando
 `comandos-linux` en el `PATH` y añade la entrada al menú de aplicaciones.
 
+> **¿No aparece en el menú?** Algunos lanzadores (como el Spotlight de Omarchy)
+> solo leen las entradas `.desktop` al arrancar. Cierra sesión y vuelve a
+> entrar, o reinicia el shell, y aparecerá. El comando `comandos-linux`
+> funciona siempre.
+
 ### Dependencias
 
 | Distribución | Paquetes |
