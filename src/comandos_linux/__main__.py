@@ -1,4 +1,4 @@
-"""Punto de entrada: `comandos-linux`."""
+"""Entry point: `comandos-linux`."""
 
 from __future__ import annotations
 
@@ -20,30 +20,36 @@ def _ruta_por_defecto(nombre: str) -> Path:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="comandos-linux",
-        description="Chuleta de comandos Linux para Ubuntu, Fedora y Arch (offline).",
+        description="Linux command cheat sheet for Ubuntu, Fedora and Arch (offline).",
     )
     parser.add_argument(
         "--export-html",
         nargs="?",
         const="",
-        metavar="RUTA",
-        help="Exporta la chuleta a un HTML autocontenido y termina.",
+        metavar="PATH",
+        help="Export the cheat sheet to a standalone HTML file and exit.",
     )
     parser.add_argument(
         "--export-md",
         nargs="?",
         const="",
-        metavar="RUTA",
-        help="Exporta la chuleta a Markdown y termina.",
+        metavar="PATH",
+        help="Export the cheat sheet to Markdown and exit.",
     )
     parser.add_argument(
-        "--listar", action="store_true", help="Muestra las categorías y termina."
+        "--list",
+        "--listar",
+        dest="listar",
+        action="store_true",
+        help="Print the categories and exit.",
     )
     parser.add_argument(
+        "--lang",
         "--idioma",
+        dest="idioma",
         choices=["es", "en"],
         default="es",
-        help="Idioma de la exportación (por defecto: es).",
+        help="Language of the export (default: es).",
     )
     parser.add_argument(
         "--version", action="version", version=f"comandos-linux {__version__}"
@@ -59,8 +65,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.listar:
         for categoria in datos.get("categorias", []):
             total = sum(len(g["comandos"]) for g in categoria["grupos"])
-            print(f"{categoria['nombre']} ({total} comandos)")
-        print(f"\nTotal: {ds.total_comandos(datos)} comandos")
+            print(f"{categoria['nombre']} ({total} commands)")
+        print(f"\nTotal: {ds.total_comandos(datos)} commands")
         return 0
 
     if args.export_html is not None:
@@ -68,7 +74,7 @@ def main(argv: list[str] | None = None) -> int:
             "comandos-linux.html"
         )
         exportar.export_html(datos, destino)
-        print(f"HTML exportado a {destino}")
+        print(f"HTML exported to {destino}")
         return 0
 
     if args.export_md is not None:
@@ -76,20 +82,20 @@ def main(argv: list[str] | None = None) -> int:
             "comandos-linux.md"
         )
         exportar.export_md(datos, destino, idioma=args.idioma)
-        print(f"Markdown exportado a {destino}")
+        print(f"Markdown exported to {destino}")
         return 0
 
     return _abrir_gui(datos)
 
 
 def _abrir_gui(datos: dict) -> int:
-    """Abre la app; si faltan GTK4/libadwaita, cae al HTML en el navegador."""
+    """Opens the app; without GTK4/libadwaita it falls back to the HTML file."""
     try:
         from .app import ComandosApp
     except (ImportError, ValueError) as error:
         print(
-            f"No se pudo iniciar la interfaz gráfica ({error}).\n"
-            "Abriendo la versión HTML en el navegador…",
+            f"Could not start the graphical interface ({error}).\n"
+            "Opening the HTML version in your browser…",
             file=sys.stderr,
         )
         return _fallback_html(datos)
@@ -104,7 +110,7 @@ def _fallback_html(datos: dict) -> int:
     try:
         subprocess.run(["xdg-open", str(destino)], check=True)
     except (OSError, subprocess.CalledProcessError) as error:
-        print(f"Abre manualmente: {destino} ({error})", file=sys.stderr)
+        print(f"Open it manually: {destino} ({error})", file=sys.stderr)
         return 1
     return 0
 

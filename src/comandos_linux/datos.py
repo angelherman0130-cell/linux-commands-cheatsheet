@@ -1,4 +1,4 @@
-"""Carga y filtrado del dataset de comandos."""
+"""Loading and filtering of the command dataset."""
 
 from __future__ import annotations
 
@@ -9,17 +9,17 @@ from typing import Any
 
 APP_ID = "io.github.angelherman0130.LinuxCommandsCheatsheet"
 
-# Familias de distribuciones: la clave del dataset y su nombre corto.
+# Distribution families: the dataset key and its short name.
 FAMILIAS: dict[str, str] = {"d": "Debian", "f": "Fedora", "a": "Arch"}
 
-# Nombres completos, para tooltips y textos.
+# Full names, for tooltips and texts.
 FAMILIAS_LARGAS: dict[str, str] = {
     "d": "Debian/Ubuntu",
     "f": "Fedora/RHEL",
     "a": "Arch",
 }
 
-# Palabras clave de /etc/os-release para detectar la familia del sistema.
+# Keywords of /etc/os-release used to detect the system family.
 DETECCION: list[tuple[tuple[str, ...], str]] = [
     (("arch", "manjaro", "endeavouros", "cachyos", "steamos"), "a"),
     (("debian", "ubuntu", "mint", "pop", "zorin", "elementary", "kali"), "d"),
@@ -59,15 +59,15 @@ def detectar_familia(ruta: str | Path | None = None) -> str | None:
 
 
 def _candidatos() -> list[Path]:
-    """Rutas donde puede vivir `comandos.json`, en orden de prioridad."""
+    """Places where `comandos.json` may live, in priority order."""
     paquete = Path(__file__).resolve().parent
     raices = [
         Path(os.environ["COMANDOS_LINUX_DATA"]).parent
         if os.environ.get("COMANDOS_LINUX_DATA")
         else None,
-        # Layout instalado y layout del repo: <...>/comandos_linux/datos/comandos.json
+        # Installed layout and repo layout: <...>/comandos_linux/datos/comandos.json
         paquete,
-        # Layout del repo: src/comandos_linux/ -> ../../datos
+        # Repo layout: src/comandos_linux/ -> ../../datos
         paquete.parent.parent,
         Path.home() / ".local" / "share" / "linux-commands-cheatsheet",
         Path("/usr/share/linux-commands-cheatsheet"),
@@ -85,7 +85,7 @@ def _candidatos() -> list[Path]:
 
 
 def ruta_datos() -> Path:
-    """Devuelve la ruta del dataset, lanzando un error claro si no existe."""
+    """Returns the dataset path, raising a clear error when missing."""
     for ruta in _candidatos():
         if ruta.is_file():
             return ruta
@@ -96,13 +96,13 @@ def ruta_datos() -> Path:
 
 
 def cargar() -> dict[str, Any]:
-    """Carga el dataset completo."""
+    """Loads the whole dataset."""
     with ruta_datos().open(encoding="utf-8") as fh:
         return json.load(fh)
 
 
 def _texto_comando(cmd: dict[str, Any]) -> str:
-    """Todo el texto buscable de un comando (incluye variantes)."""
+    """All the searchable text of a command (variants included)."""
     partes = [cmd.get("cmd", ""), cmd.get("desc", ""), cmd.get("ejemplo", "")]
     for valor in cmd.get("variantes", {}).values():
         partes.append(valor)
@@ -112,7 +112,7 @@ def _texto_comando(cmd: dict[str, Any]) -> str:
 def filtrar(
     datos: dict[str, Any], texto: str = "", distro: str = "todas"
 ) -> list[dict[str, Any]]:
-    """Filtra categorías/grupos/comandos.
+    """Filters categories/groups/commands.
 
     - `texto`: busca en comando, descripción, ejemplo, variantes y nombres.
     - `distro`: "todas" muestra las tres variantes; "d"/"f"/"a" solo la suya.
@@ -142,7 +142,7 @@ def filtrar(
 
 
 def variantes_visibles(cmd: dict[str, Any], distro: str) -> list[tuple[str, str]]:
-    """Devuelve [(clave_distro, texto)] visibles según el filtro de distro.
+    """Returns the visible [(family_key, text)] pairs for a family filter.
 
     Para comandos con variantes muestra la(s) correspondiente(s); para el resto,
     devuelve el ejemplo normal como ("", texto).
@@ -165,12 +165,12 @@ def total_comandos(datos: dict[str, Any]) -> int:
 
 
 def clave_de(categoria: str, grupo: str, cmd: str) -> str:
-    """Clave estable de un comando (se usa para los favoritos)."""
+    """Stable key of a command (used for favourites)."""
     return f"{categoria}::{grupo}::{cmd}"
 
 
 def indice(datos: dict[str, Any]) -> dict[str, tuple[dict, dict, dict]]:
-    """Mapa clave -> (categoría, grupo, comando) de todos los comandos.
+    """Map from key -> (category, group, command) for every command.
 
     La clave es estable entre idiomas (se calcula con los nombres originales).
     """

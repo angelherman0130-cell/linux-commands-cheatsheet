@@ -1,4 +1,4 @@
-"""Constructores de widgets reutilizables (filas, tarjetas, chips)."""
+"""Reusable widget builders (rows, cards, chips)."""
 
 from __future__ import annotations
 
@@ -40,7 +40,7 @@ def insignia_peligro(t: dict | None = None) -> Gtk.Label:
 
 
 def chip_boton(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Button:
-    """El comando en sí: al pulsarlo se copia."""
+    """The command itself: clicking it copies it."""
     boton = Gtk.Button()
     boton.add_css_class("chip-btn")
     boton.set_child(chip(texto))
@@ -50,7 +50,7 @@ def chip_boton(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Bu
 
 
 def ejemplo_boton(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Button:
-    """Una línea de ejemplo: al pulsarla se copia."""
+    """An example line: clicking it copies it."""
     boton = Gtk.Button()
     boton.add_css_class("ejemplo-btn")
     etiqueta = Gtk.Label(label=texto)
@@ -109,7 +109,7 @@ def fila_comando(
     variantes: list[tuple[str, str]],
     t: dict | None = None,
 ) -> Gtk.Box:
-    """Fila completa de un comando: estrella, chip, descripción y ejemplos."""
+    """Full command row: star, chip, description and examples."""
     fila = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
     fila.add_css_class("fila-comando")
 
@@ -164,7 +164,7 @@ def fila_comando(
 
 
 def _con_prefijo(texto: str) -> str:
-    """Los ejemplos que empiezan por '#' son comentarios, no comandos."""
+    """Examples starting with '#' are comments, not commands."""
     texto = texto.strip()
     if texto.startswith("#"):
         return texto
@@ -172,7 +172,7 @@ def _con_prefijo(texto: str) -> str:
 
 
 def tarjeta(titulo: str, filas: Iterable[Gtk.Widget]) -> Gtk.Box:
-    """Tarjeta de un grupo de comandos, con separadores finos entre filas."""
+    """Card for a group of commands, with thin separators between rows."""
     caja = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
     if titulo:
         encabezado = Gtk.Label(label=titulo)
@@ -184,14 +184,14 @@ def tarjeta(titulo: str, filas: Iterable[Gtk.Widget]) -> Gtk.Box:
 
 
 def tarjeta_sin_titulo(filas: Iterable[Gtk.Widget]) -> Gtk.Box:
-    """Tarjeta sin encabezado (favoritos y resultados)."""
+    """Card without a heading (favourites and results)."""
     caja = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
     caja.append(bloque(filas))
     return caja
 
 
 def bloque(filas: Iterable[Gtk.Widget]) -> Gtk.Box:
-    """Filas apiladas con separadores finos, dentro de una tarjeta."""
+    """Stacked rows with thin separators, inside a card."""
     contenedor = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
     contenedor.add_css_class("tarjeta")
     for indice, fila in enumerate(filas):
@@ -210,7 +210,7 @@ def fila_lateral(
     clave: str = "",
     marcado: bool = False,
 ) -> Gtk.ListBoxRow:
-    """Fila de la barra lateral (favoritos o categorías).
+    """Sidebar row (favourites or categories).
 
     La navegación se resuelve en la barra lateral con ``row-activated``;
     aquí solo se prepara el contenido.
@@ -252,7 +252,7 @@ def seccion_lateral(titulo: str) -> Gtk.Label:
 
 
 def estado_vacio(icono: str, titulo: str, texto: str) -> Gtk.Box:
-    """Estado vacío compacto (icono + título + descripción)."""
+    """Compact empty state (icon + title + description)."""
     caja = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
     caja.add_css_class("estado-vacio")
     caja.set_halign(Gtk.Align.CENTER)

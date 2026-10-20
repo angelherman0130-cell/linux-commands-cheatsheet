@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "linux-commands-cheatsheet"
 version = "1.0.0"
-description = "Chuleta de comandos Linux para Ubuntu, Fedora y Arch — app de escritorio que funciona sin internet"
+description = "Linux command cheat sheet for Ubuntu, Fedora and Arch — offline desktop app"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
@@ -15,6 +15,7 @@ classifiers = [
   "Environment :: X11 Applications :: GTK",
   "Intended Audience :: End Users/Desktop",
   "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
   "Natural Language :: Spanish",
   "Programming Language :: Python :: 3",
   "Topic :: System :: Systems Administration",

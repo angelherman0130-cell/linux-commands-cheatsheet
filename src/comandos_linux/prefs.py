@@ -1,4 +1,4 @@
-"""Preferencias persistentes: favoritos, última vista y distro activa.
+"""Persistent preferences: favourites, last view and active family.
 
 Se guardan en ``~/.config/linux-commands-cheatsheet/estado.json`` para que la
 app retome donde quedó la última vez.
@@ -16,7 +16,7 @@ ARCHIVO = "estado.json"
 
 
 def ruta_config() -> Path:
-    """Carpeta de configuración de la app (respeta XDG_CONFIG_HOME)."""
+    """App configuration folder (honours XDG_CONFIG_HOME)."""
     base = Path(os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config"))
     return base / NOMBRE_APP
 
@@ -47,12 +47,12 @@ def _guardar(datos: dict[str, Any]) -> None:
 # --- favoritos -----------------------------------------------------------
 
 def favoritos() -> list[str]:
-    """Claves de los comandos marcados como favoritos, en orden."""
+    """Keys of the commands marked as favourites, in order."""
     return [str(c) for c in _leer().get("favoritos", [])]
 
 
 def alternar_favorito(clave: str) -> bool:
-    """Marca o desmarca un favorito. Devuelve True si quedó marcado."""
+    """Marks or unmarks a favourite. Returns True when it is marked."""
     datos = _leer()
     lista = [str(c) for c in datos.get("favoritos", [])]
     if clave in lista:

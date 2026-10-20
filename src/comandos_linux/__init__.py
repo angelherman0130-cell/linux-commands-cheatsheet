@@ -1,4 +1,4 @@
-"""Comandos Linux — chuleta de comandos por distro (Ubuntu · Fedora · Arch).
+"""Comandos Linux — command cheat sheet per distribution (Ubuntu · Fedora · Arch).
 
 Aplicación de escritorio offline. Los datos viven en `datos/comandos.json`.
 """

@@ -1,4 +1,4 @@
-"""Ventana principal (GTK4 + libadwaita): barra lateral + panel de contenido."""
+"""Main window (GTK4 + libadwaita): sidebar + content panel."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ from . import vistas  # noqa: E402
 
 CSS = Path(__file__).with_name("estilo.css")
 
-# (clave, etiqueta corta, tooltip con el nombre completo)
+# (key, short label, tooltip with the full name)
 DISTROS = [
     ("todas", "Todas", "Show every variant"),
     ("d", "Debian", "Debian/Ubuntu"),
@@ -29,7 +29,7 @@ DISTROS = [
 
 
 class ComandosApp(Adw.Application):
-    """Aplicación: chuleta de comandos Linux por distro."""
+    """Application: Linux command cheat sheet per distribution family."""
 
     def __init__(self, datos: dict, **kwargs):
         super().__init__(
@@ -48,7 +48,7 @@ class ComandosApp(Adw.Application):
         if guardada in ds.FAMILIAS or guardada == "todas":
             self.distro: str = guardada
         else:
-            # Primera ejecución: se usa la familia detectada del sistema.
+            # First run: use the family detected from the system.
             self.distro = self.familia_detectada or "todas"
         self.favoritos: list[str] = prefs.favoritos()
         self.texto: str = ""
@@ -101,14 +101,14 @@ class ComandosApp(Adw.Application):
 
     # -- idioma ----------------------------------------------------------
     def texto(self, clave: str, defecto: str = "") -> str:
-        """Cadena de la interfaz en el idioma actual."""
+        """Interface string in the current language."""
         return i18n.textos(self.idioma).get(clave, defecto)
 
     def meta(self, clave: str, defecto: str = "") -> str:
         return i18n.meta(self.idioma).get(clave, defecto)
 
     def cambiar_idioma(self, idioma: str) -> None:
-        """Cambia el idioma de la interfaz y de los datos."""
+        """Switches the interface and the dataset to another language."""
         if not i18n.disponible(idioma) or idioma == self.idioma:
             return
         self.idioma = idioma
@@ -132,7 +132,7 @@ class ComandosApp(Adw.Application):
 
 
 class Ventana(Adw.ApplicationWindow):
-    """Ventana con barra lateral de navegación y panel de contenido."""
+    """Window with a navigation sidebar and a content panel."""
 
     def __init__(self, app: ComandosApp):
         super().__init__(application=app, title="Comandos Linux")
@@ -159,7 +159,7 @@ class Ventana(Adw.ApplicationWindow):
         """Cadenas de la interfaz en el idioma actual."""
         return i18n.textos(self.app.idioma)
 
-    # -- construcción ----------------------------------------------------
+    # -- construction ----------------------------------------------------
     def _construir(self) -> None:
         self.split = Adw.NavigationSplitView()
         self.split.set_min_sidebar_width(280)
@@ -187,7 +187,7 @@ class Ventana(Adw.ApplicationWindow):
 
         caja = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
 
-        # Filtro global de distribución
+        # Global distribution filter
         self.grupo_distro = Adw.ToggleGroup()
         for clave, etiqueta, detalle in DISTROS:
             toggle = Adw.Toggle(label=etiqueta)
@@ -213,7 +213,7 @@ class Ventana(Adw.ApplicationWindow):
         self.lista_lateral.connect("row-activated", self._al_activar_lateral)
         caja.append(self.lista_lateral)
 
-        # Selector de idioma
+        # Language selector
         pie = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         pie.add_css_class("pie-lateral")
         icono = Gtk.Image.new_from_icon_name("preferences-desktop-locale-symbolic")
@@ -243,7 +243,7 @@ class Ventana(Adw.ApplicationWindow):
         toolbar = Adw.ToolbarView()
         header = Adw.HeaderBar()
 
-        # Título que se sustituye por el buscador al pulsar 🔍
+        # The title is replaced by the search box when 🔍 is pressed
         self.titulo_pagina = Adw.WindowTitle(title="Comandos Linux", subtitle="")
         self.buscador = Gtk.SearchEntry()
         self.buscador.set_hexpand(True)
@@ -270,13 +270,13 @@ class Ventana(Adw.ApplicationWindow):
         boton_menu.set_tooltip_text(self.t.get("tooltip_menu", "Menú"))
         self.boton_menu = boton_menu
 
-        # El orden de pack_end es inverso: el último empaquetado queda a la derecha.
+        # pack_end order is reversed: the last one packed ends up on the right.
         header.pack_end(boton_menu)
         header.pack_end(boton_buscar)
 
         toolbar.add_top_bar(header)
 
-        # Páginas de contenido
+        # Content pages
         self.pila.add_named(self._pagina_favoritos(), "favoritos")
         self.paginas["favoritos"] = self.pila.get_child_by_name("favoritos")
 
@@ -407,7 +407,7 @@ class Ventana(Adw.ApplicationWindow):
         return False
 
     def detectar_distro(self) -> None:
-        """Vuelve al modo automático: usa la familia detectada del sistema."""
+        """Go back to automatic mode: uses the family detected from the system."""
         self.app.familia_detectada = ds.detectar_familia()
         familia = self.app.familia_detectada
         if familia is None:
@@ -426,7 +426,7 @@ class Ventana(Adw.ApplicationWindow):
         self._actualizar_titulo()
 
     def recargar(self) -> None:
-        """Recarga la ventana tras un cambio de idioma."""
+        """Reloads the window after a language change."""
         self.indices = ds.indice(self.app.datos)
         self.etiqueta_distribucion.set_label(
             self.t.get("seccion_distribucion", "DISTRIBUCIÓN")
@@ -440,7 +440,7 @@ class Ventana(Adw.ApplicationWindow):
         self._rellenar()
         self._actualizar_titulo()
 
-    # -- navegación ------------------------------------------------------
+    # -- navigation ------------------------------------------------------
     def ir_a(self, slug: str) -> None:
         if slug not in self.paginas:
             return
@@ -478,7 +478,7 @@ class Ventana(Adw.ApplicationWindow):
     def _cuenta_resultados(self) -> int:
         return len(ds.filtrar(self.app.datos, self.app.texto, self.app.distro))
 
-    # -- búsqueda --------------------------------------------------------
+    # -- search --------------------------------------------------------
     def _al_toggle_busqueda(self, boton: Gtk.ToggleButton) -> None:
         self.pila_titulo.set_visible_child_name(
             "buscar" if boton.get_active() else "titulo"

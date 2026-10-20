@@ -1,4 +1,4 @@
-"""Exporta el dataset a HTML standalone y a Markdown."""
+"""Exports the dataset to a standalone HTML file and to Markdown."""
 
 from __future__ import annotations
 
@@ -144,7 +144,7 @@ def export_html(
     idiomas: tuple[str, ...] = ("es", "en"),
     base: dict[str, Any] | None = None,
 ) -> Path:
-    """Escribe un HTML autocontenido (funciona sin conexión).
+    """Writes a self-contained HTML file (works offline).
 
     Incluye los idiomas indicados con un selector para cambiar entre ellos.
     """
@@ -184,7 +184,7 @@ def export_md(
     idioma: str = "es",
     base: dict[str, Any] | None = None,
 ) -> Path:
-    """Escribe la chuleta completa en Markdown, en el idioma indicado."""
+    """Writes the whole cheat sheet in Markdown, in the given language."""
     from . import i18n
 
     destino = Path(destino)

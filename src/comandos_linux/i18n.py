@@ -1,4 +1,4 @@
-"""Traducciones de la interfaz y del dataset de comandos.
+"""Translations of the interface and of the command dataset.
 
 El español es el idioma base (los datos viven en el JSON). El inglés se
 guarda en ``i18n/en.json`` y se aplica sobre una copia del dataset, de modo
@@ -24,7 +24,7 @@ def disponible(idioma: str) -> bool:
 
 
 def cargar(idioma: str) -> dict[str, Any]:
-    """Devuelve el diccionario de traducciones de un idioma."""
+    """Returns the translation dictionary of a language."""
     if idioma not in IDIOMAS:
         idioma = BASE
     if idioma in _cache:
@@ -42,16 +42,16 @@ def cargar(idioma: str) -> dict[str, Any]:
 
 
 def textos(idioma: str) -> dict[str, str]:
-    """Cadenas de la interfaz de un idioma."""
+    """Interface strings of a language."""
     return cargar(idioma).get("ui", {})
 
 
 def meta(idioma: str) -> dict[str, str]:
-    """Título, subtítulo y nota del dataset en un idioma."""
+    """Title, subtitle and note of the dataset in a language."""
     return cargar(idioma).get("meta", {})
 
 
-# Cadenas del HTML exportado (el español es el idioma base).
+# Strings of the exported HTML (Spanish is the base language).
 HTML_BASE: dict[str, str] = {
     "todas": "Todas",
     "expandir": "Expandir todo",
@@ -62,7 +62,7 @@ HTML_BASE: dict[str, str] = {
 
 
 def textos_html(idioma: str) -> dict[str, str]:
-    """Cadenas de la interfaz del HTML exportado."""
+    """Interface strings of the exported HTML."""
     textos = dict(HTML_BASE)
     textos.update(cargar(idioma).get("ui", {}))
     textos.update(cargar(idioma).get("meta", {}))
@@ -74,7 +74,7 @@ def _clave(categoria: str, grupo: str, cmd: str) -> str:
 
 
 def aplicar(datos: dict[str, Any], idioma: str) -> dict[str, Any]:
-    """Devuelve una copia del dataset con los textos del idioma pedido.
+    """Returns a copy of the dataset with the texts of the given language.
 
     Las traducciones se indexan por el texto original en español, así que
     solo hay que traducir cada frase una vez. Cada comando conserva además

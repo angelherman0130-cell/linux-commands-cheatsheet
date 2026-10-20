@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-# Instala Comandos Linux en el usuario actual.
-#   ./install.sh            -> instala (pide sudo solo si faltan dependencias)
-#   ./install.sh --sin-deps -> no intenta instalar dependencias del sistema
+# Installs Comandos Linux for the current user.
+#   ./install.sh             -> install
+#   ./install.sh --desktop   -> also create a desktop shortcut
+#   ./install.sh --no-deps   -> do not install system dependencies
 set -euo pipefail
 
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -21,39 +22,39 @@ error() { echo "${ROJO}::${FIN} $*" >&2; }
 CON_DEPS=1
 ACCESO_DIRECTO=0
 
-uso() {
+usage() {
   cat <<'EOF'
-Uso: ./install.sh [opciones]
+Usage: ./install.sh [options]
 
-  --escritorio   Además crea un acceso directo en el Escritorio
-                 (solo útil en escritorios que muestran iconos: GNOME, KDE…)
-  --sin-deps     No intenta instalar dependencias del sistema
-  -h, --help     Muestra esta ayuda
+  --desktop, --escritorio   Also create a shortcut on the Desktop
+                             (only useful on desktops that show icons: GNOME, KDE…)
+  --no-deps, --sin-deps     Do not try to install system dependencies
+  -h, --help                Show this help
 EOF
 }
 
 for arg in "$@"; do
   case "$arg" in
-    --sin-deps)   CON_DEPS=0 ;;
-    --escritorio) ACCESO_DIRECTO=1 ;;
-    -h|--help)    uso; exit 0 ;;
-    *) aviso "Opción desconocida: $arg"; uso; exit 1 ;;
+    --no-deps|--sin-deps)   CON_DEPS=0 ;;
+    --desktop|--escritorio) ACCESO_DIRECTO=1 ;;
+    -h|--help)             usage; exit 0 ;;
+    *) aviso "Unknown option: $arg"; usage; exit 1 ;;
   esac
 done
 
 echo
-echo "  Comandos Linux — instalador"
-echo "  ---------------------------"
+echo "  Comandos Linux — installer"
+echo "  --------------------------"
 echo
 
-# --- 1. sistema ---------------------------------------------------------
+# --- 1. system -------------------------------------------------------------
 [[ -f /etc/os-release ]] && . /etc/os-release
-DISTRO="${ID:-desconocido}"
+DISTRO="${ID:-unknown}"
 FAMILIA="${ID_LIKE:-$DISTRO}"
 
-info "Sistema detectado: $PRETTY_NAME"
+info "Detected system: $PRETTY_NAME"
 
-# --- 2. dependencias ----------------------------------------------------
+# --- 2. dependencies --------------------------------------------------------
 tiene_gui() {
   python3 - <<'PY' >/dev/null 2>&1
 import gi
@@ -64,30 +65,33 @@ PY
 }
 
 paquetes_para() {
-  # Se prueba el ID y también ID_LIKE (Omarchy: ID=omarchy, ID_LIKE=arch).
+  # Both ID and ID_LIKE are checked (Omarchy: ID=omarchy, ID_LIKE=arch).
   for id in "$1" "$2"; do
     case "$id" in
-      arch|archlinux|endeavouros|manjaro) echo "python-gobject gtk4 libadwaita"; return ;;
-      ubuntu|debian|linuxmint|pop|elementary|zorin) echo "python3-gi gir1.2-gtk-4.0 gir1.2-adw-1"; return ;;
-      fedora|rhel|centos|nobara) echo "python3-gobject gtk4 libadwaita"; return ;;
+      arch|archlinux|omarchy|endeavouros|manjaro)
+        echo "python-gobject gtk4 libadwaita"; return ;;
+      ubuntu|debian|linuxmint|pop|elementary|zorin)
+        echo "python3-gi gir1.2-gtk-4.0 gir1.2-adw-1"; return ;;
+      fedora|rhel|centos|nobara)
+        echo "python3-gobject gtk4 libadwaita"; return ;;
     esac
   done
   echo ""
 }
 
 if tiene_gui; then
-  info "Dependencias GTK4/libadwaita: ya instaladas"
+  info "GTK4/libadwaita dependencies: already installed"
 elif [[ $CON_DEPS -eq 0 ]]; then
-  aviso "Faltan las dependencias y se pidió --sin-deps; la app usará el modo HTML."
+  aviso "Dependencies are missing and --no-deps was given; the app will use HTML mode."
 else
   PAQUETES="$(paquetes_para "$DISTRO" "$FAMILIA")"
   if [[ -z "$PAQUETES" ]]; then
-    aviso "Distro no reconocida ($DISTRO). Instala a mano:"
-    aviso "  - python3 con PyGObject (gi), GTK 4 y libadwaita"
+    aviso "Unrecognised distribution ($DISTRO). Install by hand:"
+    aviso "  - python3 with PyGObject (gi), GTK 4 and libadwaita"
   else
     echo
-    aviso "Faltan dependencias. Se instalarán: $PAQUETES"
-    read -r -p "¿Continuar? [s/N] " respuesta
+    aviso "Missing dependencies. They will be installed: $PAQUETES"
+    read -r -p "Continue? [s/N] " respuesta
     if [[ "${respuesta,,}" == "s" ]]; then
       if command -v pacman >/dev/null 2>&1; then
         sudo pacman -S --needed $PAQUETES
@@ -96,27 +100,27 @@ else
       elif command -v dnf >/dev/null 2>&1; then
         sudo dnf install -y $PAQUETES
       else
-        error "No se encontró un gestor de paquetes conocido."
+        error "No known package manager found."
         exit 1
       fi
     else
-      aviso "Continuando sin dependencias; la app funcionará en modo HTML."
+      aviso "Continuing without dependencies; the app will run in HTML mode."
     fi
   fi
 fi
 
-# --- 3. copiar el programa ---------------------------------------------
+# --- 3. copy the program ----------------------------------------------------
 mkdir -p "$DESTINO"
 rm -rf "$DESTINO/comandos_linux"
 cp -r "$RAIZ/src/comandos_linux" "$DESTINO/comandos_linux"
 find "$DESTINO" -name "__pycache__" -type d -prune -exec rm -rf {} + 2>/dev/null || true
-info "Programa copiado a $DESTINO"
+info "Program copied to $DESTINO"
 
-# --- 4. lanzador --------------------------------------------------------
+# --- 4. launcher ------------------------------------------------------------
 mkdir -p "$BIN_HOME"
 cat > "$BIN_HOME/comandos-linux" <<EOF
 #!/usr/bin/env python3
-"""Lanzador de Comandos Linux (generado por install.sh)."""
+"""Launcher for Comandos Linux (generated by install.sh)."""
 import os
 import sys
 
@@ -130,44 +134,44 @@ if __name__ == "__main__":
     sys.exit(main())
 EOF
 chmod +x "$BIN_HOME/comandos-linux"
-info "Lanzador: $BIN_HOME/comandos-linux"
+info "Launcher: $BIN_HOME/comandos-linux"
 
-# --- 5. entrada de menú e icono ---------------------------------------
+# --- 5. menu entry and icon -------------------------------------------------
 mkdir -p "$APLICACIONES" "$ICONOS"
 cp "$RAIZ/assets/desktop/comandos-linux.desktop" "$APLICACIONES/comandos-linux.desktop"
 chmod +x "$APLICACIONES/comandos-linux.desktop"
 cp "$RAIZ/assets/iconos/comandos-linux.svg" "$ICONOS/comandos-linux.svg"
-info "Entrada de menú e icono instalados"
+info "Menu entry and icon installed"
 
 command -v update-desktop-database >/dev/null 2>&1 && \
   update-desktop-database "$APLICACIONES" >/dev/null 2>&1 || true
 command -v gtk-update-icon-cache >/dev/null 2>&1 && \
   gtk-update-icon-cache -f -t "$DATA_HOME/icons/hicolor" >/dev/null 2>&1 || true
 
-# --- 5b. acceso directo en el escritorio (opcional) ---------------------
+# --- 5b. desktop shortcut (optional) -----------------------------------------
 if [[ $ACCESO_DIRECTO -eq 1 ]]; then
   ESCRITORIO="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
   mkdir -p "$ESCRITORIO"
   ACCESO="$ESCRITORIO/Comandos Linux.desktop"
   cp "$RAIZ/assets/desktop/comandos-linux.desktop" "$ACCESO"
   chmod +x "$ACCESO"
-  # GNOME exige marcar el archivo como confiable para poder lanzarlo con doble clic.
+  # GNOME needs the file marked as trusted to be launched with a double click.
   command -v gio >/dev/null 2>&1 && \
     gio set "$ACCESO" metadata::trusted true >/dev/null 2>&1 || true
-  info "Acceso directo en el escritorio: $ACCESO"
+  info "Desktop shortcut: $ACCESO"
 fi
 
-# --- 6. comprobar -------------------------------------------------------
+# --- 6. sanity check ----------------------------------------------------------
 echo
 if [[ ":$PATH:" == *":$BIN_HOME:"* ]]; then
-  info "Listo. Abre la app con:  comandos-linux"
+  info "Done. Open the app with:  comandos-linux"
 else
-  aviso "Instala esta línea en tu ~/.bashrc para poder usar 'comandos-linux':"
+  aviso "Add this line to your ~/.bashrc to be able to run 'comandos-linux':"
   echo "    export PATH=\"\$PATH:$BIN_HOME\""
 fi
-info "También aparecerá en el menú de aplicaciones como «Comandos Linux»."
-aviso "Si no la ves enseguida, reinicia sesión (algunos lanzadores solo leen las"
-aviso "entradas de menú al arrancar)."
+info "It will also show up in the application menu as \"Linux Commands\"."
+aviso "If you don't see it right away, log out and back in (some launchers"
+aviso "only read the menu entries at startup)."
 echo
 
 "$BIN_HOME/comandos-linux" --version 2>/dev/null || true

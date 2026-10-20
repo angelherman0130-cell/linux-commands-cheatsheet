@@ -2,102 +2,102 @@
 
 # Comandos Linux
 
-**Chuleta de comandos para Ubuntu, Fedora y Arch — en una app de escritorio que funciona sin internet.**
+**A Linux command cheat sheet for Ubuntu, Fedora and Arch — as a native desktop app that works completely offline.**
 
-![App Comandos Linux](docs/captura-app.png)
+![Comandos Linux app](docs/captura-app.png)
 
 </div>
 
 ---
 
-## ¿Qué es?
+## What is it?
 
-Una aplicación de escritorio nativa (GTK4 + libadwaita) con **263 comandos** Linux
-organizados en **15 categorías**. Los comandos que cambian entre
-distribuciones (instalar paquetes, activar servicios, cortafuegos…)
-muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver.
+A native desktop app (GTK4 + libadwaita) with **263 Linux commands** across
+**15 categories**. Commands that differ between distributions (package
+managers, service activation, firewalls…) show the **Ubuntu**, **Fedora** or
+**Arch** variant, and you pick which one to see.
 
-- **100 % offline** — no hace ni una sola petición de red.
-- **Barra lateral** con las categorías, iconos y contador de comandos.
-- **Búsqueda instantánea** por comando, descripción o ejemplo, con resultados planos.
-- **Favoritos ⭐**: marca los comandos que usas a diario y quedan guardados.
-- **Copiar al portapapeles** con un clic (en el comando o en su ejemplo).
-- **⚠️ Avisos en los comandos destructivos**, para no copiarlos a ciegas.
-- **Modo oscuro/claro automático**, siguiendo el tema del sistema.
-- Los mismos datos se pueden exportar a **HTML** (standalone) y a **Markdown**.
+- **100 % offline** — it never makes a single network request.
+- **Sidebar** with every category, its icon and a command count.
+- **Instant search** by command, description or example, with flat results.
+- **Favourites ⭐**: mark the commands you use daily and keep them saved.
+- **Copy to the clipboard** with a single click (on the command or its example).
+- **⚠️ Warnings on destructive commands**, so you never paste one blindly.
+- **Distribution families**, auto-detected from your own system.
+- **Spanish and English**, switchable at any time.
+- The same data can be exported to **HTML** (standalone) and **Markdown**.
 
-## 📚 Qué incluye
+## 📚 What's inside
 
-| Categoría | Comandos | Categoría | Comandos |
+| Category | Commands | Category | Commands |
 |---|---:|---|---:|
-| 📁 Archivos y directorios | 23 | 💽 Discos y montajes | 12 |
-| 🔍 Búsqueda y texto | 27 | ℹ️ Info del sistema | 21 |
-| 📦 Compresión y checksums | 15 | 🌿 Git | 17 |
-| 🔒 Permisos y usuarios | 17 | 🐳 Docker | 13 |
-| ⚙️ Procesos | 20 | 💻 Entorno y shell | 12 |
-| 🛠️ Servicios (systemd) | 15 | 🧰 Herramientas modernas | 12 |
-| 📥 Paquetes | 14 | ⌨️ Atajos | 14 |
-| 🌐 Redes | 31 | **Total** | **263** |
+| 📁 Files and directories | 23 | 💽 Disks and mounts | 12 |
+| 🔍 Search and text | 27 | ℹ️ System info | 21 |
+| 📦 Compression and checksums | 15 | 🌿 Git | 17 |
+| 🔒 Permissions and users | 17 | 🐳 Docker | 13 |
+| ⚙️ Processes | 20 | 💻 Environment and shell | 12 |
+| 🛠️ Services (systemd) | 15 | 🧰 Modern tools | 12 |
+| 📥 Packages | 14 | ⌨️ Shortcuts | 14 |
+| 🌐 Networking | 31 | **Total** | **263** |
 
-### Servicios del sistema
+### System services
 
-![Servicios systemd](docs/captura-servicios.png)
+![systemd services](docs/captura-servicios.png)
 
-### Comandos destructivos, con aviso
+### Destructive commands come with a warning
 
-![Avisos de comandos destructivos](docs/captura-peligro.png)
+![destructive command warnings](docs/captura-peligro.png)
 
-## 🧭 Familias de distribuciones, no distribuciones
+## 🧭 Distribution families, not distributions
 
-De los 263 comandos, **234 son idénticos** en cualquier Linux y solo **29 cambian**
-según el gestor de paquetes. Por eso la app no pregunta "¿Ubuntu, Fedora o Arch?",
-sino **¿de qué familia es tu sistema?**:
+Of the 263 commands, **234 are identical** on any Linux and only **29 change**
+depending on the package manager. So the app does not ask "Ubuntu, Fedora or
+Arch?", it asks **which family does your system belong to?**:
 
-| Familia | Gestor | Sirve también a |
+| Family | Package manager | Also covers |
 |---|---|---|
 | **Debian/Ubuntu** | `apt`, `dpkg`, `ufw` | Debian, Mint, Pop!_OS, Zorin, elementary, Kali |
 | **Fedora/RHEL** | `dnf`, `firewall-cmd` | RHEL, Rocky, Alma, CentOS Stream, Nobara |
 | **Arch** | `pacman`, `nft` | Manjaro, EndeavourOS, SteamOS, CachyOS |
 
-**Y la detecta sola**: al abrir la app se lee `/etc/os-release` (`ID` e
-`ID_LIKE`) y se selecciona tu familia automáticamente. Si prefieres verla
-siempre, el menú ☰ tiene **«Detectar mi distro»** para volver al modo
-automático.
+**And it detects it for you**: on startup the app reads `/etc/os-release`
+(`ID` and `ID_LIKE`) and selects your family automatically. If you prefer to
+always see the manual list, the ☰ menu has a **"Detect my distro"** entry to
+go back to automatic mode.
 
-El selector sigue mostrando 4 botones cortos (`Todas │ Debian │ Fedora │
-Arch`) para que quepan en la barra lateral; el nombre completo va en el tooltip.
+The selector keeps four short buttons (`All │ Debian │ Fedora │ Arch`) so it
+fits in the sidebar; the full name shows in the tooltip.
 
-## 🌍 Dos idiomas
+## 🌍 Two languages
 
-La app está **en español e inglés**: no solo los botones, también las
-descripciones, los ejemplos, los avisos y los nombres de las categorías.
-El selector está **al pie de la barra lateral** y la preferencia se recuerda
-al cerrar la app.
+The app is **in Spanish and English** — not just the buttons, but the
+descriptions, examples, warnings and category names. The selector sits at the
+**bottom of the sidebar** and your choice is remembered between sessions.
 
-![La app en inglés](docs/captura-ingles.png)
+![The app in English](docs/captura-ingles.png)
 
-En inglés, la búsqueda también busca en inglés: escribe `permissions` y
-encuentra `chmod`, `chown`… aunque el comando esté en español.
+Search follows the selected language too: type `permissions` in English and it
+finds `chmod`, `chown`… even though the commands themselves stay the same.
 
-El HTML exportado lleva su propio selector de idioma y acepta el parámetro
-`?lang=en` (o `#lang=en`) para abrirlo directamente en inglés.
+The exported HTML carries its own language selector and accepts the `?lang=en`
+(or `#lang=en`) parameter to open it directly in English.
 
-## ✨ Funciones
+## ✨ Features
 
 | | |
 |---|---|
-| 🧭 Barra lateral | Categorías con icono y nº de comandos, favoritos arriba y filtro de distro |
-| 🖧 Autodetección | Detecta tu familia de distro al abrir y selecciona sus comandos |
-| 🔍 Buscar | Escribe arriba; la vista cambia a resultados planos con su categoría |
-| ⭐ Favoritos | Estrella en cada comando; se guardan entre sesiones |
-| 📋 Copiar | Clic en el comando o en el ejemplo; el portapapeles se actualiza solo |
-| ⚠️ Avisos | Los comandos destructivos se marcan con un aviso en ámbar |
-| 🌍 Idiomas | Español e inglés, conmutable al instante y sin reiniciar |
-| ⌨️ Atajos | `Ctrl+K` buscar · `Ctrl+1..9` ir a la categoría N · `Ctrl+C` copiar el seleccionado |
-| 📤 Exportar | A HTML autocontenido o a Markdown, desde el menú ☰ |
-| 🌓 Tema | Claro/oscuro automático según el sistema |
+| 🧭 Sidebar | Categories with icon and command count, favourites on top, distro filter |
+| 🖧 Auto-detection | Detects your distribution family on startup and selects its commands |
+| 🔍 Search | Type above; the view switches to flat results with each command's category |
+| ⭐ Favourites | Star any command; they are saved between sessions |
+| 📋 Copy | Click the command or its example; the clipboard is updated instantly |
+| ⚠️ Warnings | Destructive commands are flagged with an amber warning |
+| 🌍 Languages | Spanish and English, switchable instantly without restarting |
+| ⌨️ Shortcuts | `Ctrl+K` search · `Ctrl+1..9` jump to category N · `Ctrl+C` copy the selected |
+| 📤 Export | To a standalone HTML file or to Markdown, from the ☰ menu |
+| 🌓 Theme | Light/dark automatically, following the system |
 
-## 📦 Instalación
+## 📦 Installation
 
 ```bash
 git clone https://github.com/angelherman0130-cell/linux-commands-cheatsheet.git
@@ -105,73 +105,73 @@ cd linux-commands-cheatsheet
 ./install.sh
 ```
 
-El instalador detecta tu distribución, instala las dependencias que falten
-(solo pide `sudo` si de verdad son necesarias), deja el comando
-`comandos-linux` en el `PATH` y añade la entrada al menú de aplicaciones.
+The installer detects your distribution, installs the missing dependencies
+(it only asks for `sudo` when they are really needed), puts the
+`comandos-linux` command in your `PATH` and adds the entry to the application
+menu.
 
-### Opciones del instalador
+### Installer options
 
 ```bash
-./install.sh                 # instalación normal
-./install.sh --escritorio    # además crea el acceso directo en el Escritorio
-./install.sh --sin-deps      # no toca dependencias del sistema
+./install.sh                 # standard install
+./install.sh --desktop       # also create a desktop shortcut
+./install.sh --no-deps       # don't touch system dependencies
 ```
 
-> **¿No aparece en el menú?** Algunos lanzadores (como el Spotlight de Omarchy)
-> solo leen las entradas `.desktop` al arrancar. Cierra sesión y vuelve a
-> entrar, o reinicia el shell, y aparecerá. El comando `comandos-linux`
-> funciona siempre.
+> **Not showing up in the menu?** Some launchers (such as Omarchy's Spotlight)
+> only read `.desktop` entries at startup. Log out and back in, or restart the
+> shell, and it will appear. The `comandos-linux` command always works.
 
-### Dependencias
+### Dependencies
 
-| Distribución | Paquetes |
+| Distribution | Packages |
 |---|---|
 | Arch / Omarchy / Manjaro | `python-gobject gtk4 libadwaita` |
 | Ubuntu / Debian / Mint | `python3-gi gir1.2-gtk-4.0 gir1.2-adw-1` |
 | Fedora / RHEL / Nobara | `python3-gobject gtk4 libadwaita` |
 
-Si las dependencias no se pueden instalar, la app **no se rompe**: cae
-automáticamente al modo HTML y abre la chuleta en el navegador.
+If the dependencies cannot be installed, the app **does not break**: it falls
+back to HTML mode and opens the cheat sheet in your browser.
 
-### Desinstalar
+### Uninstalling
 
 ```bash
 ./uninstall.sh
 ```
 
-### Acceso directo
+### Shortcut
 
-En Linux el equivalente al acceso directo de Windows es la **entrada del
-menú de aplicaciones**: se instala en `~/.local/share/applications/` y
-aparece en cualquier launcher (Spotlight, menú de Omarchy, GNOME, KDE…).
-Si tu escritorio muestra iconos en el escritorio, `./install.sh --escritorio`
-deja además un icono en `~/Desktop/` listo para doble clic.
+On Linux the equivalent of a Windows shortcut is the **application menu
+entry**: it is installed in `~/.local/share/applications/` and shows up in any
+launcher (Spotlight, the Omarchy menu, GNOME, KDE…). If your desktop shows
+icons, `./install.sh --desktop` also leaves a ready-to-double-click icon in
+`~/Desktop/`.
 
-## 🚀 Uso
+## 🚀 Usage
 
 ```bash
-comandos-linux              # abre la app
-comandos-linux --listar     # lista las categorías en la terminal
-comandos-linux --export-html comandos-linux.html
-comandos-linux --export-md comandos-linux.md
-comandos-linux --export-md comandos-linux-en.md --idioma en
+comandos-linux              # opens the app
+comandos-linux --list       # prints the categories in the terminal
+comandos-linux --export-html commands-linux.html
+comandos-linux --export-md commands-linux.md
+comandos-linux --export-md commands-linux-en.md --lang en
 comandos-linux --version
 ```
 
-También puedes abrirla desde el menú de aplicaciones como **«Comandos Linux»**.
+You can also open it from the application menu as **"Linux Commands"**.
 
-### Atajos de teclado
+### Keyboard shortcuts
 
-| Atajo | Acción |
+| Shortcut | Action |
 |---|---|
-| `Ctrl+K` / `Ctrl+F` | Enfocar el buscador |
-| `Esc` | Limpiar la búsqueda / cerrar el buscador |
-| `Ctrl+1` … `Ctrl+9` | Ir a la categoría N |
-| `Ctrl+C` | Copiar el resultado seleccionado |
+| `Ctrl+K` / `Ctrl+F` | Focus the search box |
+| `Esc` | Clear the search / close the search box |
+| `Ctrl+1` … `Ctrl+9` | Jump to category N |
+| `Ctrl+C` | Copy the selected result |
 
-## ✏️ Añadir o corregir comandos
+## ✏️ Adding or fixing commands
 
-Todos los datos viven en **un solo archivo**:
+All the data lives in **a single file**:
 
 ```
 src/comandos_linux/datos/comandos.json
@@ -180,22 +180,22 @@ src/comandos_linux/datos/comandos.json
 ```jsonc
 {
   "nombre": "Redes",
-  "icono": "network-transmit-receive-symbolic",   // icono del sistema
-  "slug": "redes",                                 // identificador interno
+  "icono": "network-transmit-receive-symbolic",   // a system icon
+  "slug": "redes",                                 // internal identifier
   "grupos": [
     {
       "nombre": "Instalar si falta",
       "comandos": [
         { "cmd": "dig", "desc": "consultas DNS", "ejemplo": "dig example.com" },
 
-        // Si cambia según la familia, usa "variantes":
+        // If it changes per family, use "variantes":
         { "cmd": "wget", "desc": "descargas", "variantes": {
           "d": "sudo apt install wget",      // Debian / Ubuntu
           "f": "sudo dnf install wget",      // Fedora / RHEL
           "a": "sudo pacman -S wget"         // Arch
         }},
 
-        // Si es destructivo, añade "peligro" y la app lo marcará con un aviso:
+        // If it is destructive, add "peligro" and the app flags it with a warning:
         { "cmd": "rm -rf dir", "desc": "recursivo y forzado",
           "ejemplo": "rm -rf build/",
           "peligro": "Borra todo el contenido sin preguntar" }
@@ -205,106 +205,80 @@ src/comandos_linux/datos/comandos.json
 }
 ```
 
-- `cmd` → el comando (monoespaciado).
-- `desc` → descripción corta.
-- `ejemplo` → ejemplo de uso. Si empieza por `#` se muestra como comentario.
-- `variantes` → en lugar de `ejemplo` cuando el comando difiere por familia
+- `cmd` → the command (monospaced).
+- `desc` → short description.
+- `ejemplo` → usage example. If it starts with `#` it is shown as a comment.
+- `variantes` → instead of `ejemplo` when the command differs per family
   (`d` = Debian/Ubuntu, `f` = Fedora/RHEL, `a` = Arch).
-- `peligro` → texto de aviso para los comandos destructivos (opcional).
-- `icono` → cualquier icono del tema del sistema (`folder-symbolic`,
+- `peligro` → warning text for destructive commands (optional).
+- `icono` → any icon from the system theme (`folder-symbolic`,
   `network-server-symbolic`, `edit-find-symbolic`…).
 
-Guarda el archivo, reinicia la app y listo: la app, el HTML y el Markdown se
-generan siempre desde esta misma fuente.
+Save the file, restart the app and you're done: the app, the HTML and the
+Markdown are all generated from this single source.
 
-## 🗂️ Estructura
+### The dataset is the Spanish base
+
+The JSON holds the Spanish text; `src/comandos_linux/i18n/en.json` holds the
+English translation, applied on top of it at runtime.
+
+## 🗂️ Layout
 
 ```
 linux-commands-cheatsheet/
-├── install.sh / uninstall.sh     # instalación en el usuario
-├── pyproject.toml                # metadatos (permite pip install .)
+├── install.sh / uninstall.sh     # per-user installation
+├── pyproject.toml                # metadata (allows `pip install .`)
 ├── src/comandos_linux/
-│   ├── __main__.py               # CLI: --export-html, --export-md, --idioma, --listar
-│   ├── app.py                    # ventana: barra lateral + panel de contenido
-│   ├── vistas.py                 # constructores de widgets (filas, tarjetas, chips)
-│   ├── i18n.py                   # carga de traducciones y aplicación al dataset
-│   ├── i18n/en.json              # ← las traducciones al inglés
-│   ├── prefs.py                  # favoritos, idioma y preferencias persistentes
-│   ├── datos.py                  # carga, búsqueda y filtrado
-│   ├── exportar.py               # exportadores HTML y Markdown
-│   ├── estilo.css                # paleta y estilos
-│   └── datos/comandos.json       # ← el dataset (fuente única, en español)
+│   ├── __main__.py               # CLI: --export-html, --export-md, --lang, --list
+│   ├── app.py                    # window: sidebar + content panel
+│   ├── vistas.py                 # widget builders (rows, cards, chips)
+│   ├── i18n.py                   # translation loading and dataset rewriting
+│   ├── i18n/en.json              # ← the English translations
+│   ├── prefs.py                  # favourites, language and other preferences
+│   ├── datos.py                  # loading, searching and filtering
+│   ├── exportar.py               # HTML and Markdown exporters
+│   ├── estilo.css                # palette and styles
+│   └── datos/comandos.json       # ← the dataset (single source of truth)
 ├── assets/
 │   ├── desktop/comandos-linux.desktop
 │   └── iconos/comandos-linux.svg
-└── docs/                         # capturas para el README
+└── docs/                         # screenshots for the README
 ```
 
-Los favoritos y la última categoría visitada se guardan en
-`~/.config/linux-commands-cheatsheet/estado.json` (se crea solo).
+Favourites, the last visited category and the selected language are stored in
+`~/.config/linux-commands-cheatsheet/estado.json` (created automatically).
 
-### Traducir a otro idioma
+### Adding a third language
 
-El español es el idioma base y vive en `datos/comandos.json`. Para añadir un
-tercer idioma:
-
-1. Copia `src/comandos_linux/i18n/en.json` como `i18n/fr.json` y traduce sus
-   apartados (`meta`, `ui`, `categorias`, `grupos`, `comandos`, `ejemplos`,
+1. Copy `src/comandos_linux/i18n/en.json` as `i18n/fr.json` and translate its
+   sections (`meta`, `ui`, `categorias`, `grupos`, `comandos`, `ejemplos`,
    `peligros`).
-2. Registra el idioma en `i18n.py`:
+2. Register the language in `i18n.py`:
 
 ```python
 IDIOMAS = {"es": "Español", "en": "English", "fr": "Français"}
 ```
 
-3. Añade el nombre a `HTML_BASE` para el HTML exportado.
+3. Add its name to `HTML_BASE` for the exported HTML.
 
-Las traducciones se indexan **por el texto original**, así que basta con
-traducir cada frase una vez aunque aparezca en varios comandos.
+Translations are indexed **by the original text**, so each phrase only has to
+be translated once even when it shows up in several commands.
 
-## 🛠️ Desarrollo
+## 🛠️ Development
 
 ```bash
 git clone https://github.com/angelherman0130-cell/linux-commands-cheatsheet.git
 cd linux-commands-cheatsheet
-PYTHONPATH=src python3 -m comandos_linux          # ejecutar sin instalar
-PYTHONPATH=src python3 -m comandos_linux --export-md /tmp/prueba.md
+PYTHONPATH=src python3 -m comandos_linux          # run without installing
+PYTHONPATH=src python3 -m comandos_linux --export-md /tmp/test.md
 ```
 
-Para una instalación de desarrollo también vale:
+For a development install you can also use:
 
 ```bash
-pip install -e .      # instala el comando `comandos-linux` en modo editable
+pip install -e .      # installs the `comandos-linux` command in editable mode
 ```
 
----
+## 📄 License
 
-## English summary
-
-**Comandos Linux** is a native desktop app (GTK4 + libadwaita) that works
-completely offline. It bundles **263 Linux commands in 15 categories** for
-Ubuntu, Fedora and Arch — including the distro-specific variants (package
-managers, service activation, firewalls, network tools). The sidebar lists
-every category with its icon and command count, and a favourites section keeps
-the commands you use most at hand. Live search shows flat results with the
-category of each match, one click copies any command or example, destructive
-commands are flagged with a warning, and the whole cheat sheet can be exported
-to a standalone HTML file or to Markdown.
-
-Because only 29 of the 263 commands actually change between distributions, the
-app works with **distribution families** (Debian/Ubuntu, Fedora/RHEL, Arch)
-instead of exact distros, and it **detects yours automatically** by reading
-`/etc/os-release` — so the right commands are already selected when you open it.
-
-The interface and every description ship in **Spanish and English**, switchable
-from the sidebar — and the choice is remembered between sessions. Search works
-in the selected language too, so typing `permissions` in English finds
-`chmod` and `chown`.
-
-The dataset lives in a single JSON file, so adding or fixing a command is a
-one-line edit — the app, the HTML export and the Markdown export are all
-generated from it.
-
-## 📄 Licencia
-
-MIT — ver [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
