@@ -43,7 +43,7 @@ for arg in "$@"; do
 done
 
 echo
-echo "  Comandos Linux — installer"
+echo "  Linux Commands — installer"
 echo "  --------------------------"
 echo
 

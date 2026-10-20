@@ -1,10 +1,13 @@
 <div align="center">
 
-# Comandos Linux
+# Linux Commands
 
 **A Linux command cheat sheet for Ubuntu, Fedora and Arch — as a native desktop app that works completely offline.**
 
-![Comandos Linux app](docs/captura-app.png)
+> The app is called *Comandos Linux* in Spanish and *Linux Commands* in English;
+> it shows its own name in the language you pick.
+
+![Linux Commands app](docs/captura-app.png)
 
 </div>
 

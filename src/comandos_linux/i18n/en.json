@@ -52,7 +52,8 @@
     "coincidencias": "categories match",
     "menu_detectar": "Detect my distro",
     "aviso_detectada": "Using the {familia} commands",
-    "aviso_sin_deteccion": "Could not detect your distro"
+    "aviso_sin_deteccion": "Could not detect your distro",
+    "titulo_app": "Linux Commands"
   },
   "categorias": {
     "archivos": "Files and directories",

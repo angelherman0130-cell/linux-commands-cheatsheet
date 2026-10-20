@@ -19,4 +19,4 @@ command -v update-desktop-database >/dev/null 2>&1 && \
 command -v gtk-update-icon-cache >/dev/null 2>&1 && \
   gtk-update-icon-cache -f -t "$DATA_HOME/icons/hicolor" >/dev/null 2>&1 || true
 
-info "Comandos Linux has been uninstalled."
+info "Linux Commands has been uninstalled."

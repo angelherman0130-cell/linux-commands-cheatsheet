@@ -51,7 +51,7 @@ class ComandosApp(Adw.Application):
             # First run: use the family detected from the system.
             self.distro = self.familia_detectada or "todas"
         self.favoritos: list[str] = prefs.favoritos()
-        self.texto: str = ""
+        self.consulta: str = ""
         self._registrar_acciones()
 
     # -- ciclo de vida ---------------------------------------------------
@@ -135,7 +135,7 @@ class Ventana(Adw.ApplicationWindow):
     """Window with a navigation sidebar and a content panel."""
 
     def __init__(self, app: ComandosApp):
-        super().__init__(application=app, title="Comandos Linux")
+        super().__init__(application=app, title=app.texto("titulo_app", "Comandos Linux"))
         self.set_default_size(1080, 780)
         self.app = app
         self.add_css_class("cheatsheet")
@@ -175,14 +175,16 @@ class Ventana(Adw.ApplicationWindow):
         self.set_content(self.toasts)
 
     def _construir_sidebar(self) -> Adw.NavigationPage:
-        pagina = Adw.NavigationPage(title="Comandos Linux")
+        pagina = Adw.NavigationPage(title=self.app.texto("titulo_app", "Comandos Linux"))
 
         toolbar = Adw.ToolbarView()
         header = Adw.HeaderBar()
         header.add_css_class("sidebar-header")
-        header.set_title_widget(
-            Adw.WindowTitle(title="Comandos Linux", subtitle="Ubuntu · Fedora · Arch")
+        self.titulo_sidebar = Adw.WindowTitle(
+            title=self.app.texto("titulo_app", "Comandos Linux"),
+            subtitle="Ubuntu · Fedora · Arch",
         )
+        header.set_title_widget(self.titulo_sidebar)
         toolbar.add_top_bar(header)
 
         caja = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
@@ -238,13 +240,15 @@ class Ventana(Adw.ApplicationWindow):
         return pagina
 
     def _construir_contenido(self) -> Adw.NavigationPage:
-        pagina = Adw.NavigationPage(title="Comandos Linux")
+        pagina = Adw.NavigationPage(title=self.app.texto("titulo_app", "Comandos Linux"))
 
         toolbar = Adw.ToolbarView()
         header = Adw.HeaderBar()
 
         # The title is replaced by the search box when 🔍 is pressed
-        self.titulo_pagina = Adw.WindowTitle(title="Comandos Linux", subtitle="")
+        self.titulo_pagina = Adw.WindowTitle(
+            title=self.app.texto("titulo_app", "Comandos Linux"), subtitle=""
+        )
         self.buscador = Gtk.SearchEntry()
         self.buscador.set_hexpand(True)
         self.buscador.set_placeholder_text(
@@ -428,6 +432,8 @@ class Ventana(Adw.ApplicationWindow):
     def recargar(self) -> None:
         """Reloads the window after a language change."""
         self.indices = ds.indice(self.app.datos)
+        self.set_title(self.app.texto("titulo_app", "Comandos Linux"))
+        self.titulo_sidebar.set_title(self.app.texto("titulo_app", "Comandos Linux"))
         self.etiqueta_distribucion.set_label(
             self.t.get("seccion_distribucion", "DISTRIBUCIÓN")
         )
@@ -476,7 +482,7 @@ class Ventana(Adw.ApplicationWindow):
                     break
 
     def _cuenta_resultados(self) -> int:
-        return len(ds.filtrar(self.app.datos, self.app.texto, self.app.distro))
+        return len(ds.filtrar(self.app.datos, self.app.consulta, self.app.distro))
 
     # -- search --------------------------------------------------------
     def _al_toggle_busqueda(self, boton: Gtk.ToggleButton) -> None:
@@ -491,9 +497,9 @@ class Ventana(Adw.ApplicationWindow):
         self.buscador.grab_focus()
 
     def _al_buscar(self, entrada: Gtk.SearchEntry) -> None:
-        self.app.texto = entrada.get_text()
+        self.app.consulta = entrada.get_text()
         self._rellenar_resultados()
-        if self.app.texto.strip():
+        if self.app.consulta.strip():
             self.ir_a("resultados")
         else:
             self._actualizar_titulo()
@@ -604,8 +610,8 @@ class Ventana(Adw.ApplicationWindow):
     def _rellenar_resultados(self) -> None:
         self._vaciar(self.lista_resultados)
 
-        coincidencias = ds.filtrar(self.app.datos, self.app.texto, self.app.distro)
-        if not self.app.texto.strip():
+        coincidencias = ds.filtrar(self.app.datos, self.app.consulta, self.app.distro)
+        if not self.app.consulta.strip():
             self._mostrar_estado(
                 "system-search-symbolic",
                 self.t.get("vacio_buscar_titulo", "Busca un comando"),
@@ -624,7 +630,7 @@ class Ventana(Adw.ApplicationWindow):
                 self.t.get(
                     "vacio_sin_resultados_texto",
                     "No hay ningún comando que coincida con «{texto}».",
-                ).format(texto=self.app.texto),
+                ).format(texto=self.app.consulta),
             )
             return
 
@@ -777,9 +783,9 @@ class Ventana(Adw.ApplicationWindow):
     def about(self) -> None:
         ventana = Adw.AboutWindow(
             transient_for=self,
-            application_name="Comandos Linux",
+            application_name=self.app.texto("titulo_app", "Comandos Linux"),
             application_icon="comandos-linux",
-            version="1.4.0",
+            version="1.5.0",
             developer="Angel Herman",
             comments=self.t.get(
                 "about_comentarios",
