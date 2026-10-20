@@ -10,7 +10,8 @@
   --chip-line: rgba(0, 0, 0, 0.08);
   --dim: #6A6862;
   --hover: rgba(0, 0, 0, 0.045);
-  --gold: #C88800;
+  --gold: #A66A00;
+  --gold-bg: rgba(200, 136, 0, 0.16);
 }
 
 .cheatsheet.dark {
@@ -24,6 +25,7 @@
   --dim: #ADABA2;
   --hover: rgba(255, 255, 255, 0.06);
   --gold: #F5C263;
+  --gold-bg: rgba(245, 194, 99, 0.18);
 }
 
 /* --- estructura ------------------------------------------------------- */
@@ -134,6 +136,31 @@
   background-color: var(--brand-bg);
   border-radius: 6px;
   padding: 1px 8px;
+}
+
+.insignia-peligro {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold);
+  background-color: var(--gold-bg);
+  border-radius: 6px;
+  padding: 1px 7px;
+}
+
+.aviso-peligro {
+  margin-left: 34px;
+  margin-top: 2px;
+}
+
+.aviso-peligro label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.aviso-texto {
+  font-size: 12.5px;
+  color: var(--gold);
 }
 
 .icono-btn {

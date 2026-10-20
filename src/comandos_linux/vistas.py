@@ -27,6 +27,13 @@ def insignia(texto: str) -> Gtk.Label:
     return etiqueta
 
 
+def insignia_peligro() -> Gtk.Label:
+    etiqueta = Gtk.Label(label="⚠")
+    etiqueta.add_css_class("insignia-peligro")
+    etiqueta.set_tooltip_text("Comando destructivo: lee el aviso antes de ejecutarlo")
+    return etiqueta
+
+
 def chip_boton(texto: str, al_copiar: Callable) -> Gtk.Button:
     """El comando en sí: al pulsarlo se copia."""
     boton = Gtk.Button()
@@ -98,6 +105,8 @@ def fila_comando(
     arriba.add_css_class("fila-principal")
 
     arriba.append(boton_estrella(marcado, clave, al_alternar))
+    if cmd.get("peligro"):
+        arriba.append(insignia_peligro())
     arriba.append(chip_boton(cmd.get("cmd", ""), al_copiar))
 
     descripcion = Gtk.Label(label=cmd.get("desc", ""))
@@ -125,6 +134,19 @@ def fila_comando(
         ejemplos.append(linea)
     if variantes:
         fila.append(ejemplos)
+
+    aviso = cmd.get("peligro")
+    if aviso:
+        linea = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        linea.add_css_class("aviso-peligro")
+        icono = Gtk.Label(label="⚠")
+        linea.append(icono)
+        texto = Gtk.Label(label=aviso)
+        texto.add_css_class("aviso-texto")
+        texto.set_wrap(True)
+        texto.set_xalign(0)
+        linea.append(texto)
+        fila.append(linea)
 
     return fila
 

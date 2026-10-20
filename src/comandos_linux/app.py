@@ -631,7 +631,7 @@ class Ventana(Adw.ApplicationWindow):
             transient_for=self,
             application_name="Comandos Linux",
             application_icon="comandos-linux",
-            version="1.1.0",
+            version="1.2.0",
             developer="Angel Herman",
             comments="Chuleta de comandos Linux para Ubuntu, Fedora y Arch. "
             "Funciona sin conexión a internet.",

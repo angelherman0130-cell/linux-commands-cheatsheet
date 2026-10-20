@@ -88,6 +88,16 @@
               "cmd": "ln -s file link",
               "desc": "enlace simbólico",
               "ejemplo": "ln -s /opt/app/bin/app app"
+            },
+            {
+              "cmd": "cp -r dir",
+              "desc": "copiar recursivo",
+              "ejemplo": "cp -r proyecto/ copia/"
+            },
+            {
+              "cmd": "ln -sf link",
+              "desc": "forzar enlace simbólico",
+              "ejemplo": "ln -sfn /opt/app/bin/app app"
             }
           ]
         },
@@ -125,254 +135,28 @@
               "ejemplo": "tail -f /var/log/syslog"
             }
           ]
+        },
+        {
+          "nombre": "Identificar",
+          "comandos": [
+            {
+              "cmd": "file file",
+              "desc": "tipo de archivo",
+              "ejemplo": "file imagen.png"
+            },
+            {
+              "cmd": "realpath file",
+              "desc": "ruta absoluta",
+              "ejemplo": "realpath ./notas.txt"
+            }
+          ]
         }
       ],
       "icono": "folder-symbolic",
       "slug": "archivos"
     },
     {
-      "nombre": "SSH",
-      "grupos": [
-        {
-          "nombre": "Conexión",
-          "comandos": [
-            {
-              "cmd": "ssh user@host",
-              "desc": "conectar",
-              "ejemplo": "ssh angel@192.168.1.10"
-            },
-            {
-              "cmd": "ssh -p port user@host",
-              "desc": "con puerto",
-              "ejemplo": "ssh -p 2222 angel@servidor.com"
-            },
-            {
-              "cmd": "ssh -D port user@host",
-              "desc": "reenvío dinámico",
-              "ejemplo": "ssh -D 1080 angel@servidor.com"
-            }
-          ]
-        },
-        {
-          "nombre": "Instalar y activar",
-          "comandos": [
-            {
-              "cmd": "cliente + servidor",
-              "desc": "activar el servicio",
-              "variantes": {
-                "u": "sudo apt install openssh-client openssh-server && sudo systemctl enable --now ssh",
-                "f": "sudo dnf install openssh-clients openssh-server && sudo systemctl enable --now sshd",
-                "a": "sudo pacman -S openssh && sudo systemctl enable --now sshd"
-              }
-            }
-          ]
-        }
-      ],
-      "icono": "network-server-symbolic",
-      "slug": "ssh"
-    },
-    {
-      "nombre": "Redes",
-      "grupos": [
-        {
-          "nombre": "Diagnóstico",
-          "comandos": [
-            {
-              "cmd": "ping host",
-              "desc": "probar conexión",
-              "ejemplo": "ping google.com"
-            },
-            {
-              "cmd": "whois domain",
-              "desc": "info del dominio",
-              "ejemplo": "whois example.com"
-            },
-            {
-              "cmd": "dig domain",
-              "desc": "DNS del dominio",
-              "ejemplo": "dig example.com"
-            },
-            {
-              "cmd": "dig -x host",
-              "desc": "búsqueda inversa",
-              "ejemplo": "dig -x 8.8.8.8"
-            }
-          ]
-        },
-        {
-          "nombre": "Descargas",
-          "comandos": [
-            {
-              "cmd": "wget file",
-              "desc": "descargar",
-              "ejemplo": "wget https://example.com/archivo.zip"
-            },
-            {
-              "cmd": "wget -r url",
-              "desc": "descarga recursiva",
-              "ejemplo": "wget -r https://example.com/docs/"
-            },
-            {
-              "cmd": "wget -c url",
-              "desc": "reanudar descarga",
-              "ejemplo": "wget -c https://example.com/disco.iso"
-            }
-          ]
-        },
-        {
-          "nombre": "Instalar si falta",
-          "comandos": [
-            {
-              "cmd": "wget",
-              "desc": "descargas",
-              "variantes": {
-                "u": "sudo apt install wget",
-                "f": "sudo dnf install wget",
-                "a": "sudo pacman -S wget"
-              }
-            },
-            {
-              "cmd": "whois",
-              "desc": "info de dominio",
-              "variantes": {
-                "u": "sudo apt install whois",
-                "f": "sudo dnf install whois",
-                "a": "sudo pacman -S whois"
-              }
-            },
-            {
-              "cmd": "dig",
-              "desc": "consultas DNS",
-              "variantes": {
-                "u": "sudo apt install bind9-dnsutils",
-                "f": "sudo dnf install bind-utils",
-                "a": "sudo pacman -S bind"
-              }
-            }
-          ]
-        }
-      ],
-      "icono": "network-transmit-receive-symbolic",
-      "slug": "redes"
-    },
-    {
-      "nombre": "Info del sistema",
-      "grupos": [
-        {
-          "nombre": "Tiempo",
-          "comandos": [
-            {
-              "cmd": "date",
-              "desc": "fecha y hora",
-              "ejemplo": "date"
-            },
-            {
-              "cmd": "cal",
-              "desc": "calendario",
-              "ejemplo": "cal"
-            },
-            {
-              "cmd": "uptime",
-              "desc": "tiempo encendido",
-              "ejemplo": "uptime"
-            }
-          ]
-        },
-        {
-          "nombre": "Usuarios",
-          "comandos": [
-            {
-              "cmd": "w",
-              "desc": "quién está conectado",
-              "ejemplo": "w"
-            },
-            {
-              "cmd": "whoami",
-              "desc": "usuario actual",
-              "ejemplo": "whoami"
-            }
-          ]
-        },
-        {
-          "nombre": "Hardware y kernel",
-          "comandos": [
-            {
-              "cmd": "uname -a",
-              "desc": "config del kernel",
-              "ejemplo": "uname -a"
-            },
-            {
-              "cmd": "cat /proc/cpuinfo",
-              "desc": "CPU",
-              "ejemplo": "cat /proc/cpuinfo | grep 'model name'"
-            },
-            {
-              "cmd": "cat /proc/meminfo",
-              "desc": "memoria",
-              "ejemplo": "cat /proc/meminfo | head -3"
-            }
-          ]
-        },
-        {
-          "nombre": "Recursos",
-          "comandos": [
-            {
-              "cmd": "df -h",
-              "desc": "uso de disco",
-              "ejemplo": "df -h"
-            },
-            {
-              "cmd": "du -sh dir",
-              "desc": "tamaño de dir",
-              "ejemplo": "du -sh ~/Descargas"
-            },
-            {
-              "cmd": "free -h",
-              "desc": "uso de RAM",
-              "ejemplo": "free -h"
-            }
-          ]
-        },
-        {
-          "nombre": "Ayuda y ubicación",
-          "comandos": [
-            {
-              "cmd": "man command",
-              "desc": "manual",
-              "ejemplo": "man grep"
-            },
-            {
-              "cmd": "whereis app",
-              "desc": "binario, fuente, man",
-              "ejemplo": "whereis python3"
-            },
-            {
-              "cmd": "which app",
-              "desc": "cuál se ejecuta",
-              "ejemplo": "which python3"
-            }
-          ]
-        },
-        {
-          "nombre": "Instalar si falta",
-          "comandos": [
-            {
-              "cmd": "man",
-              "desc": "manuales",
-              "variantes": {
-                "u": "sudo apt install man-db manpages",
-                "f": "sudo dnf install man-db man-pages",
-                "a": "sudo pacman -S man-db man-pages"
-              }
-            }
-          ]
-        }
-      ],
-      "icono": "dialog-information-symbolic",
-      "slug": "info-sistema"
-    },
-    {
-      "nombre": "Búsqueda",
+      "nombre": "Búsqueda y texto",
       "grupos": [
         {
           "nombre": "grep y locate",
@@ -412,126 +196,139 @@
               }
             }
           ]
+        },
+        {
+          "nombre": "Buscar archivos",
+          "comandos": [
+            {
+              "cmd": "find . -name \"*.log\"",
+              "desc": "archivos por nombre",
+              "ejemplo": "find /var/log -name \"*.log\""
+            },
+            {
+              "cmd": "find . -type d",
+              "desc": "solo directorios",
+              "ejemplo": "find . -type d -name \"node_modules\""
+            },
+            {
+              "cmd": "find . -mtime -7",
+              "desc": "modificados en 7 días",
+              "ejemplo": "find ~/Descargas -mtime -7"
+            },
+            {
+              "cmd": "find . -size +100M",
+              "desc": "más de 100 MB",
+              "ejemplo": "find / -size +500M 2>/dev/null"
+            },
+            {
+              "cmd": "find . -exec rm {} \\;",
+              "desc": "ejecutar sobre cada resultado",
+              "ejemplo": "find . -name \"*.tmp\" -exec rm {} \\;",
+              "peligro": "Borra todos los archivos .tmp que encuentre"
+            }
+          ]
+        },
+        {
+          "nombre": "Transformar texto",
+          "comandos": [
+            {
+              "cmd": "sed -i 's/viejo/nuevo/' file",
+              "desc": "reemplazar dentro del archivo",
+              "ejemplo": "sed -i 's/http/https/g' notas.md"
+            },
+            {
+              "cmd": "awk '{print $1}' file",
+              "desc": "primera columna",
+              "ejemplo": "awk '{print $1}' /etc/passwd"
+            },
+            {
+              "cmd": "cut -d: -f1 file",
+              "desc": "cortar por separador",
+              "ejemplo": "cut -d: -f1 /etc/passwd"
+            },
+            {
+              "cmd": "tr a-z A-Z",
+              "desc": "cambiar a mayúsculas",
+              "ejemplo": "cat archivo | tr a-z A-Z"
+            },
+            {
+              "cmd": "sort file",
+              "desc": "ordenar líneas",
+              "ejemplo": "sort nombres.txt"
+            },
+            {
+              "cmd": "sort -u file",
+              "desc": "ordenar sin repetir",
+              "ejemplo": "sort -u lista.txt"
+            },
+            {
+              "cmd": "uniq -c file",
+              "desc": "contar repetidos",
+              "ejemplo": "sort lista.txt | uniq -c"
+            },
+            {
+              "cmd": "diff a b",
+              "desc": "comparar dos archivos",
+              "ejemplo": "diff configviejo confignuevo"
+            }
+          ]
+        },
+        {
+          "nombre": "Contar y agrupar",
+          "comandos": [
+            {
+              "cmd": "wc -l file",
+              "desc": "número de líneas",
+              "ejemplo": "wc -l registro.txt"
+            },
+            {
+              "cmd": "wc -w file",
+              "desc": "número de palabras",
+              "ejemplo": "wc -w notas.txt"
+            },
+            {
+              "cmd": "sort | uniq -c | sort -rn",
+              "desc": "los más repetidos",
+              "ejemplo": "sort access.log | uniq -c | sort -rn | head"
+            },
+            {
+              "cmd": "tee file",
+              "desc": "guardar y mostrar a la vez",
+              "ejemplo": "ps aux | tee salida.txt"
+            },
+            {
+              "cmd": "xargs",
+              "desc": "convertir entradas en argumentos",
+              "ejemplo": "find . -name \"*.log\" | xargs grep error"
+            },
+            {
+              "cmd": "grep -v patron",
+              "desc": "excluir líneas",
+              "ejemplo": "ps aux | grep -v grep"
+            },
+            {
+              "cmd": "grep -E \"a|b\"",
+              "desc": "expresión regular",
+              "ejemplo": "grep -E \"error|warn\" registro.txt"
+            },
+            {
+              "cmd": "grep -c patron",
+              "desc": "contar coincidencias",
+              "ejemplo": "grep -c error registro.txt"
+            },
+            {
+              "cmd": "grep -i patron",
+              "desc": "sin distinguir mayúsculas",
+              "ejemplo": "grep -i warning registro.txt"
+            }
+          ]
         }
       ],
       "icono": "edit-find-symbolic",
-      "slug": "busqueda"
+      "slug": "busqueda-texto"
     },
     {
-      "nombre": "Procesos",
-      "grupos": [
-        {
-          "nombre": "Ver",
-          "comandos": [
-            {
-              "cmd": "ps",
-              "desc": "procesos actuales",
-              "ejemplo": "ps"
-            },
-            {
-              "cmd": "ps aux",
-              "desc": "todos, en detalle",
-              "ejemplo": "ps aux"
-            }
-          ]
-        },
-        {
-          "nombre": "Terminar",
-          "comandos": [
-            {
-              "cmd": "kill pid",
-              "desc": "por PID",
-              "ejemplo": "kill 1234"
-            },
-            {
-              "cmd": "killall proc",
-              "desc": "por nombre",
-              "ejemplo": "killall firefox"
-            }
-          ]
-        },
-        {
-          "nombre": "Segundo plano",
-          "comandos": [
-            {
-              "cmd": "bg",
-              "desc": "reanudar en segundo plano",
-              "ejemplo": "bg   # después de Ctrl+Z"
-            },
-            {
-              "cmd": "fg",
-              "desc": "traer al primer plano",
-              "ejemplo": "fg"
-            }
-          ]
-        },
-        {
-          "nombre": "Instalar si falta",
-          "comandos": [
-            {
-              "cmd": "killall",
-              "desc": "viene en psmisc",
-              "variantes": {
-                "u": "sudo apt install psmisc",
-                "f": "sudo dnf install psmisc",
-                "a": "sudo pacman -S psmisc"
-              }
-            }
-          ]
-        }
-      ],
-      "icono": "system-run-symbolic",
-      "slug": "procesos"
-    },
-    {
-      "nombre": "Permisos",
-      "grupos": [
-        {
-          "nombre": "Cambiar",
-          "comandos": [
-            {
-              "cmd": "chmod octal file",
-              "desc": "cambiar permisos",
-              "ejemplo": "chmod 700 secreto.txt"
-            }
-          ]
-        },
-        {
-          "nombre": "Bits y orden",
-          "comandos": [
-            {
-              "cmd": "4 = r · 2 = w · 1 = x",
-              "desc": "lectura, escritura, ejecución",
-              "ejemplo": "# 6 = 4+2 → rw-"
-            },
-            {
-              "cmd": "owner / group / other",
-              "desc": "orden de los dígitos",
-              "ejemplo": "# 754 → rwx r-x r--"
-            }
-          ]
-        },
-        {
-          "nombre": "Ejemplos",
-          "comandos": [
-            {
-              "cmd": "chmod 755 file",
-              "desc": "rwxr-xr-x",
-              "ejemplo": "chmod 755 script.sh"
-            },
-            {
-              "cmd": "chmod 644 file",
-              "desc": "rw-r--r--",
-              "ejemplo": "chmod 644 notas.txt"
-            }
-          ]
-        }
-      ],
-      "icono": "dialog-password-symbolic",
-      "slug": "permisos"
-    },
-    {
-      "nombre": "Compresión",
+      "nombre": "Compresión y checksums",
       "grupos": [
         {
           "nombre": "tar",
@@ -592,72 +389,416 @@
               "ejemplo": "gzip -d registro.txt.gz"
             }
           ]
+        },
+        {
+          "nombre": "Zip",
+          "comandos": [
+            {
+              "cmd": "zip -r dir",
+              "desc": "comprimir en zip",
+              "ejemplo": "zip -r fotos.zip fotos/"
+            },
+            {
+              "cmd": "unzip archivo.zip",
+              "desc": "descomprimir zip",
+              "ejemplo": "unzip archivos.zip"
+            }
+          ]
+        },
+        {
+          "nombre": "Integridad",
+          "comandos": [
+            {
+              "cmd": "sha256sum file",
+              "desc": "hash SHA-256",
+              "ejemplo": "sha256sum imagen.iso"
+            },
+            {
+              "cmd": "sha256sum -c hashes.txt",
+              "desc": "verificar los hashes",
+              "ejemplo": "sha256sum -c hashes.txt"
+            },
+            {
+              "cmd": "md5sum file",
+              "desc": "hash MD5",
+              "ejemplo": "md5sum imagen.iso"
+            },
+            {
+              "cmd": "base64 file",
+              "desc": "codificar en base64",
+              "ejemplo": "base64 -w0 clave.txt"
+            }
+          ]
         }
       ],
       "icono": "package-x-generic-symbolic",
       "slug": "compresion"
     },
     {
-      "nombre": "Atajos",
+      "nombre": "Permisos y usuarios",
       "grupos": [
         {
-          "nombre": "Control",
+          "nombre": "Cambiar",
           "comandos": [
             {
-              "cmd": "Ctrl+C",
-              "desc": "interrumpir",
-              "ejemplo": "ping google.com   # Ctrl+C para parar"
+              "cmd": "chmod octal file",
+              "desc": "cambiar permisos",
+              "ejemplo": "chmod 700 secreto.txt"
             },
             {
-              "cmd": "Ctrl+Z",
-              "desc": "detener",
-              "ejemplo": "sleep 100   # Ctrl+Z, luego bg"
-            },
-            {
-              "cmd": "Ctrl+D",
-              "desc": "salir (EOF)",
-              "ejemplo": "cat > nota.txt   # Ctrl+D guarda"
-            },
-            {
-              "cmd": "exit",
-              "desc": "cerrar sesión",
-              "ejemplo": "exit"
+              "cmd": "chmod -R 755 dir",
+              "desc": "cambiar permisos en recursivo",
+              "ejemplo": "chmod -R 755 ~/scripts/"
             }
           ]
         },
         {
-          "nombre": "Edición de línea",
+          "nombre": "Bits y orden",
           "comandos": [
             {
-              "cmd": "Ctrl+W",
-              "desc": "borrar palabra",
-              "ejemplo": "# borra la última palabra escrita"
+              "cmd": "4 = r · 2 = w · 1 = x",
+              "desc": "lectura, escritura, ejecución",
+              "ejemplo": "# 6 = 4+2 → rw-"
             },
             {
-              "cmd": "Ctrl+U",
-              "desc": "borrar línea",
-              "ejemplo": "# borra toda la línea"
+              "cmd": "owner / group / other",
+              "desc": "orden de los dígitos",
+              "ejemplo": "# 754 → rwx r-x r--"
             }
           ]
         },
         {
-          "nombre": "Historial",
+          "nombre": "Ejemplos",
           "comandos": [
             {
-              "cmd": "Ctrl+R",
-              "desc": "buscar en historial",
-              "ejemplo": "# escribe ssh para buscar el último"
+              "cmd": "chmod 755 file",
+              "desc": "rwxr-xr-x",
+              "ejemplo": "chmod 755 script.sh"
             },
             {
-              "cmd": "!!",
-              "desc": "repetir el último",
-              "ejemplo": "sudo !!   # repite con sudo"
+              "cmd": "chmod 644 file",
+              "desc": "rw-r--r--",
+              "ejemplo": "chmod 644 notas.txt"
+            },
+            {
+              "cmd": "chmod 777 dir",
+              "desc": "todos los permisos",
+              "ejemplo": "chmod 777 /tmp",
+              "peligro": "Deja el archivo o la carpeta abierto para cualquiera"
+            }
+          ]
+        },
+        {
+          "nombre": "Propietario y grupo",
+          "comandos": [
+            {
+              "cmd": "chown user file",
+              "desc": "cambiar de dueño",
+              "ejemplo": "chown angel notas.txt"
+            },
+            {
+              "cmd": "chown -R user:group dir",
+              "desc": "cambiar dueño y grupo",
+              "ejemplo": "chown -R angel:angel ~/proyectos/"
+            },
+            {
+              "cmd": "chgrp group file",
+              "desc": "cambiar de grupo",
+              "ejemplo": "chgrp developers notas.txt"
+            }
+          ]
+        },
+        {
+          "nombre": "Superusuario",
+          "comandos": [
+            {
+              "cmd": "sudo comando",
+              "desc": "ejecutar como root",
+              "ejemplo": "sudo apt update"
+            },
+            {
+              "cmd": "su - usuario",
+              "desc": "cambiar de usuario",
+              "ejemplo": "su - angel"
+            },
+            {
+              "cmd": "passwd",
+              "desc": "cambiar la contraseña",
+              "ejemplo": "passwd"
+            }
+          ]
+        },
+        {
+          "nombre": "Identidad",
+          "comandos": [
+            {
+              "cmd": "id",
+              "desc": "usuario y grupos",
+              "ejemplo": "id"
+            },
+            {
+              "cmd": "groups usuario",
+              "desc": "grupos de un usuario",
+              "ejemplo": "groups angel"
+            },
+            {
+              "cmd": "umask",
+              "desc": "máscara de permisos nuevos",
+              "ejemplo": "umask"
+            },
+            {
+              "cmd": "getfacl file",
+              "desc": "ver las ACL",
+              "ejemplo": "getfacl notas.txt"
             }
           ]
         }
       ],
-      "icono": "input-keyboard-symbolic",
-      "slug": "atajos"
+      "icono": "dialog-password-symbolic",
+      "slug": "permisos-usuarios"
+    },
+    {
+      "nombre": "Procesos",
+      "grupos": [
+        {
+          "nombre": "Ver",
+          "comandos": [
+            {
+              "cmd": "ps",
+              "desc": "procesos actuales",
+              "ejemplo": "ps"
+            },
+            {
+              "cmd": "ps aux",
+              "desc": "todos, en detalle",
+              "ejemplo": "ps aux"
+            },
+            {
+              "cmd": "top",
+              "desc": "procesos en vivo",
+              "ejemplo": "top"
+            },
+            {
+              "cmd": "htop",
+              "desc": "procesos en vivo con más detalle",
+              "ejemplo": "htop"
+            }
+          ]
+        },
+        {
+          "nombre": "Terminar",
+          "comandos": [
+            {
+              "cmd": "kill pid",
+              "desc": "por PID",
+              "ejemplo": "kill 1234"
+            },
+            {
+              "cmd": "killall proc",
+              "desc": "por nombre",
+              "ejemplo": "killall firefox"
+            },
+            {
+              "cmd": "kill -9 pid",
+              "desc": "forzar el cierre",
+              "ejemplo": "kill -9 1234",
+              "peligro": "El proceso no tiene opción de limpiar nada"
+            },
+            {
+              "cmd": "pkill nombre",
+              "desc": "terminar por nombre",
+              "ejemplo": "pkill -f node"
+            }
+          ]
+        },
+        {
+          "nombre": "Segundo plano",
+          "comandos": [
+            {
+              "cmd": "bg",
+              "desc": "reanudar en segundo plano",
+              "ejemplo": "bg   # después de Ctrl+Z"
+            },
+            {
+              "cmd": "fg",
+              "desc": "traer al primer plano",
+              "ejemplo": "fg"
+            },
+            {
+              "cmd": "cmd &",
+              "desc": "ejecutar en segundo plano",
+              "ejemplo": "python3 servidor.py &"
+            },
+            {
+              "cmd": "nohup cmd &",
+              "desc": "segundo plano que sobrevive al cerrar",
+              "ejemplo": "nohup python3 servidor.py &"
+            },
+            {
+              "cmd": "jobs",
+              "desc": "trabajos en segundo plano",
+              "ejemplo": "jobs"
+            },
+            {
+              "cmd": "disown",
+              "desc": "soltar el trabajo del shell",
+              "ejemplo": "disown %1"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "killall",
+              "desc": "viene en psmisc",
+              "variantes": {
+                "u": "sudo apt install psmisc",
+                "f": "sudo dnf install psmisc",
+                "a": "sudo pacman -S psmisc"
+              }
+            },
+            {
+              "cmd": "htop",
+              "desc": "visor de procesos",
+              "variantes": {
+                "u": "sudo apt install htop",
+                "f": "sudo dnf install htop",
+                "a": "sudo pacman -S htop"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Observar",
+          "comandos": [
+            {
+              "cmd": "lsof -i :8080",
+              "desc": "quién usa un puerto",
+              "ejemplo": "lsof -i :8080"
+            },
+            {
+              "cmd": "watch -n 1 cmd",
+              "desc": "repetir cada segundo",
+              "ejemplo": "watch -n 1 'df -h'"
+            },
+            {
+              "cmd": "strace -p pid",
+              "desc": "rastrear las llamadas al sistema",
+              "ejemplo": "strace -p 1234"
+            },
+            {
+              "cmd": "ps aux --sort=-%mem",
+              "desc": "ordenar por memoria",
+              "ejemplo": "ps aux --sort=-%mem | head"
+            }
+          ]
+        }
+      ],
+      "icono": "system-run-symbolic",
+      "slug": "procesos"
+    },
+    {
+      "nombre": "Servicios (systemd)",
+      "icono": "preferences-system-symbolic",
+      "slug": "servicios",
+      "grupos": [
+        {
+          "nombre": "Estado",
+          "comandos": [
+            {
+              "cmd": "systemctl status servicio",
+              "desc": "estado del servicio",
+              "ejemplo": "systemctl status sshd"
+            },
+            {
+              "cmd": "systemctl list-units --type=service",
+              "desc": "listar los servicios",
+              "ejemplo": "systemctl list-units --type=service"
+            },
+            {
+              "cmd": "systemctl is-enabled servicio",
+              "desc": "si arranca al inicio",
+              "ejemplo": "systemctl is-enabled sshd"
+            }
+          ]
+        },
+        {
+          "nombre": "Control",
+          "comandos": [
+            {
+              "cmd": "systemctl start servicio",
+              "desc": "arrancar",
+              "ejemplo": "systemctl start nginx"
+            },
+            {
+              "cmd": "systemctl stop servicio",
+              "desc": "parar",
+              "ejemplo": "systemctl stop nginx"
+            },
+            {
+              "cmd": "systemctl restart servicio",
+              "desc": "reiniciar",
+              "ejemplo": "systemctl restart nginx"
+            },
+            {
+              "cmd": "systemctl reload servicio",
+              "desc": "recargar la configuración",
+              "ejemplo": "systemctl reload nginx"
+            },
+            {
+              "cmd": "systemctl enable --now servicio",
+              "desc": "arrancar y activar al inicio",
+              "ejemplo": "systemctl enable --now nginx"
+            },
+            {
+              "cmd": "systemctl disable --now servicio",
+              "desc": "parar y desactivar",
+              "ejemplo": "systemctl disable --now nginx"
+            }
+          ]
+        },
+        {
+          "nombre": "Registros",
+          "comandos": [
+            {
+              "cmd": "journalctl -u servicio -f",
+              "desc": "seguir el log en vivo",
+              "ejemplo": "journalctl -u nginx -f"
+            },
+            {
+              "cmd": "journalctl -p err -n 50",
+              "desc": "últimos errores",
+              "ejemplo": "journalctl -p err -n 50"
+            },
+            {
+              "cmd": "journalctl --since \"1 hour ago\"",
+              "desc": "log de la última hora",
+              "ejemplo": "journalctl --since \"1 hour ago\""
+            },
+            {
+              "cmd": "journalctl -b",
+              "desc": "log del arranque actual",
+              "ejemplo": "journalctl -b"
+            },
+            {
+              "cmd": "journalctl -f",
+              "desc": "seguir todo el log",
+              "ejemplo": "journalctl -f"
+            }
+          ]
+        },
+        {
+          "nombre": "Del usuario",
+          "comandos": [
+            {
+              "cmd": "systemctl --user status servicio",
+              "desc": "servicio del usuario",
+              "ejemplo": "systemctl --user status pipewire"
+            }
+          ]
+        }
+      ]
     },
     {
       "nombre": "Paquetes (cambia por distro)",
@@ -762,10 +903,1005 @@
               }
             }
           ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "git",
+              "desc": "control de versiones",
+              "variantes": {
+                "u": "sudo apt install git",
+                "f": "sudo dnf install git",
+                "a": "sudo pacman -S git"
+              }
+            },
+            {
+              "cmd": "curl",
+              "desc": "descargas y APIs",
+              "variantes": {
+                "u": "sudo apt install curl",
+                "f": "sudo dnf install curl",
+                "a": "sudo pacman -S curl"
+              }
+            },
+            {
+              "cmd": "jq",
+              "desc": "consultar JSON",
+              "variantes": {
+                "u": "sudo apt install jq",
+                "f": "sudo dnf install jq",
+                "a": "sudo pacman -S jq"
+              }
+            },
+            {
+              "cmd": "unzip",
+              "desc": "descomprimir .zip",
+              "variantes": {
+                "u": "sudo apt install unzip",
+                "f": "sudo dnf install unzip",
+                "a": "sudo pacman -S unzip"
+              }
+            },
+            {
+              "cmd": "rsync",
+              "desc": "sincronizar carpetas",
+              "variantes": {
+                "u": "sudo apt install rsync",
+                "f": "sudo dnf install rsync",
+                "a": "sudo pacman -S rsync"
+              }
+            }
+          ]
         }
       ],
       "icono": "system-software-install-symbolic",
       "slug": "paquetes"
+    },
+    {
+      "nombre": "Redes",
+      "grupos": [
+        {
+          "nombre": "Diagnóstico",
+          "comandos": [
+            {
+              "cmd": "ping host",
+              "desc": "probar conexión",
+              "ejemplo": "ping google.com"
+            },
+            {
+              "cmd": "whois domain",
+              "desc": "info del dominio",
+              "ejemplo": "whois example.com"
+            },
+            {
+              "cmd": "dig domain",
+              "desc": "DNS del dominio",
+              "ejemplo": "dig example.com"
+            },
+            {
+              "cmd": "dig -x host",
+              "desc": "búsqueda inversa",
+              "ejemplo": "dig -x 8.8.8.8"
+            },
+            {
+              "cmd": "ip addr",
+              "desc": "direcciones IP",
+              "ejemplo": "ip addr show"
+            },
+            {
+              "cmd": "ip route",
+              "desc": "tabla de rutas",
+              "ejemplo": "ip route"
+            },
+            {
+              "cmd": "ss -tulpn",
+              "desc": "puertos en escucha",
+              "ejemplo": "ss -tulpn | grep 8080"
+            },
+            {
+              "cmd": "nc -zv host puerto",
+              "desc": "comprobar un puerto",
+              "ejemplo": "nc -zv ejemplo.com 443"
+            },
+            {
+              "cmd": "traceroute host",
+              "desc": "ruta hasta el host",
+              "ejemplo": "traceroute google.com"
+            },
+            {
+              "cmd": "host dominio",
+              "desc": "resolución DNS",
+              "ejemplo": "host ejemplo.com"
+            },
+            {
+              "cmd": "ping -c 4 host",
+              "desc": "cuatro paquetes y para",
+              "ejemplo": "ping -c 4 google.com"
+            }
+          ]
+        },
+        {
+          "nombre": "Descargas",
+          "comandos": [
+            {
+              "cmd": "wget file",
+              "desc": "descargar",
+              "ejemplo": "wget https://example.com/archivo.zip"
+            },
+            {
+              "cmd": "wget -r url",
+              "desc": "descarga recursiva",
+              "ejemplo": "wget -r https://example.com/docs/"
+            },
+            {
+              "cmd": "wget -c url",
+              "desc": "reanudar descarga",
+              "ejemplo": "wget -c https://example.com/disco.iso"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "wget",
+              "desc": "descargas",
+              "variantes": {
+                "u": "sudo apt install wget",
+                "f": "sudo dnf install wget",
+                "a": "sudo pacman -S wget"
+              }
+            },
+            {
+              "cmd": "whois",
+              "desc": "info de dominio",
+              "variantes": {
+                "u": "sudo apt install whois",
+                "f": "sudo dnf install whois",
+                "a": "sudo pacman -S whois"
+              }
+            },
+            {
+              "cmd": "dig",
+              "desc": "consultas DNS",
+              "variantes": {
+                "u": "sudo apt install bind9-dnsutils",
+                "f": "sudo dnf install bind-utils",
+                "a": "sudo pacman -S bind"
+              }
+            },
+            {
+              "cmd": "traceroute",
+              "desc": "ruta hasta el host",
+              "variantes": {
+                "u": "sudo apt install traceroute",
+                "f": "sudo dnf install traceroute",
+                "a": "sudo pacman -S traceroute"
+              }
+            },
+            {
+              "cmd": "netcat",
+              "desc": "comprobar puertos",
+              "variantes": {
+                "u": "sudo apt install netcat-openbsd",
+                "f": "sudo dnf install netcat",
+                "a": "sudo pacman -S netcat"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Descargar con curl",
+          "comandos": [
+            {
+              "cmd": "curl url",
+              "desc": "ver la respuesta",
+              "ejemplo": "curl https://ejemplo.com"
+            },
+            {
+              "cmd": "curl -O url",
+              "desc": "guardar con el nombre original",
+              "ejemplo": "curl -O https://ejemplo.com/imagen.png"
+            },
+            {
+              "cmd": "curl -L -o salida url",
+              "desc": "guardar con otro nombre",
+              "ejemplo": "curl -L -o datos.json https://ejemplo.com/api"
+            },
+            {
+              "cmd": "curl -I url",
+              "desc": "ver las cabeceras HTTP",
+              "ejemplo": "curl -I https://ejemplo.com"
+            },
+            {
+              "cmd": "curl -X POST -d \"a=1\" url",
+              "desc": "enviar datos",
+              "ejemplo": "curl -X POST -d \"q=linux\" https://api.ejemplo.com"
+            },
+            {
+              "cmd": "curl -H \"Token: abc\" url",
+              "desc": "cabecera personalizada",
+              "ejemplo": "curl -H \"Authorization: Bearer abc\" https://api.ejemplo.com"
+            }
+          ]
+        },
+        {
+          "nombre": "Transferir archivos",
+          "comandos": [
+            {
+              "cmd": "scp file user@host:",
+              "desc": "copiar por SSH",
+              "ejemplo": "scp notas.txt angel@192.168.1.10:/tmp/"
+            },
+            {
+              "cmd": "rsync -avz origen destino",
+              "desc": "sincronizar carpetas",
+              "ejemplo": "rsync -avz ~/proyectos/ servidor:/srv/"
+            }
+          ]
+        },
+        {
+          "nombre": "Cortafuegos",
+          "comandos": [
+            {
+              "cmd": "ufw status",
+              "desc": "reglas del cortafuegos",
+              "variantes": {
+                "u": "sudo ufw status",
+                "f": "sudo firewall-cmd --list-all",
+                "a": "sudo nft list ruleset"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Red",
+          "comandos": [
+            {
+              "cmd": "nmcli device status",
+              "desc": "dispositivos de red",
+              "ejemplo": "nmcli device status"
+            },
+            {
+              "cmd": "nmcli con show",
+              "desc": "conexiones guardadas",
+              "ejemplo": "nmcli connection show"
+            },
+            {
+              "cmd": "ip link set eth0 up",
+              "desc": "levantar una interfaz",
+              "ejemplo": "ip link set eth0 up"
+            }
+          ]
+        }
+      ],
+      "icono": "network-transmit-receive-symbolic",
+      "slug": "redes"
+    },
+    {
+      "nombre": "Discos y montajes",
+      "icono": "drive-harddisk-symbolic",
+      "slug": "discos",
+      "grupos": [
+        {
+          "nombre": "Ver",
+          "comandos": [
+            {
+              "cmd": "lsblk -f",
+              "desc": "discos y particiones",
+              "ejemplo": "lsblk -f"
+            },
+            {
+              "cmd": "df -h",
+              "desc": "uso de disco",
+              "ejemplo": "df -h"
+            },
+            {
+              "cmd": "du -sh dir",
+              "desc": "tamaño de una carpeta",
+              "ejemplo": "du -sh ~/Descargas"
+            },
+            {
+              "cmd": "ls /dev/sd*",
+              "desc": "discos detectados",
+              "ejemplo": "ls /dev/sd*"
+            },
+            {
+              "cmd": "swapon --show",
+              "desc": "memoria de intercambio",
+              "ejemplo": "swapon --show"
+            }
+          ]
+        },
+        {
+          "nombre": "Montar",
+          "comandos": [
+            {
+              "cmd": "mount /dev/sda1 /mnt",
+              "desc": "montar una partición",
+              "ejemplo": "sudo mount /dev/sda1 /mnt"
+            },
+            {
+              "cmd": "umount /mnt",
+              "desc": "desmontar",
+              "ejemplo": "sudo umount /mnt"
+            },
+            {
+              "cmd": "blkid",
+              "desc": "UUID y tipo de las particiones",
+              "ejemplo": "blkid"
+            }
+          ]
+        },
+        {
+          "nombre": "Particiones",
+          "comandos": [
+            {
+              "cmd": "fdisk -l",
+              "desc": "listar las particiones",
+              "ejemplo": "sudo fdisk -l",
+              "peligro": "Si entras a fdisk sin -l puedes borrar particiones"
+            },
+            {
+              "cmd": "mkfs.ext4 /dev/sdb1",
+              "desc": "formatear en ext4",
+              "ejemplo": "sudo mkfs.ext4 /dev/sdb1",
+              "peligro": "Borra todos los datos del dispositivo"
+            },
+            {
+              "cmd": "dd if=origen of=destino",
+              "desc": "copiar bloque a bloque",
+              "ejemplo": "sudo dd if=imagen.iso of=/dev/sdb",
+              "peligro": "Sobrescribe el dispositivo destino por completo"
+            },
+            {
+              "cmd": "e2fsck /dev/sda1",
+              "desc": "revisar y reparar el sistema de archivos",
+              "ejemplo": "sudo e2fsck /dev/sda1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Info del sistema",
+      "grupos": [
+        {
+          "nombre": "Tiempo",
+          "comandos": [
+            {
+              "cmd": "date",
+              "desc": "fecha y hora",
+              "ejemplo": "date"
+            },
+            {
+              "cmd": "cal",
+              "desc": "calendario",
+              "ejemplo": "cal"
+            },
+            {
+              "cmd": "uptime",
+              "desc": "tiempo encendido",
+              "ejemplo": "uptime"
+            },
+            {
+              "cmd": "date +%F",
+              "desc": "fecha en formato ISO",
+              "ejemplo": "date +%F"
+            }
+          ]
+        },
+        {
+          "nombre": "Usuarios",
+          "comandos": [
+            {
+              "cmd": "w",
+              "desc": "quién está conectado",
+              "ejemplo": "w"
+            },
+            {
+              "cmd": "whoami",
+              "desc": "usuario actual",
+              "ejemplo": "whoami"
+            },
+            {
+              "cmd": "hostnamectl",
+              "desc": "nombre y estado del equipo",
+              "ejemplo": "hostnamectl"
+            }
+          ]
+        },
+        {
+          "nombre": "Hardware y kernel",
+          "comandos": [
+            {
+              "cmd": "uname -a",
+              "desc": "config del kernel",
+              "ejemplo": "uname -a"
+            },
+            {
+              "cmd": "cat /proc/cpuinfo",
+              "desc": "CPU",
+              "ejemplo": "cat /proc/cpuinfo | grep 'model name'"
+            },
+            {
+              "cmd": "cat /proc/meminfo",
+              "desc": "memoria",
+              "ejemplo": "cat /proc/meminfo | head -3"
+            },
+            {
+              "cmd": "lscpu",
+              "desc": "detalle de la CPU",
+              "ejemplo": "lscpu"
+            },
+            {
+              "cmd": "lsusb",
+              "desc": "dispositivos USB",
+              "ejemplo": "lsusb"
+            },
+            {
+              "cmd": "lspci",
+              "desc": "dispositivos PCI",
+              "ejemplo": "lspci"
+            },
+            {
+              "cmd": "nproc",
+              "desc": "número de núcleos",
+              "ejemplo": "nproc"
+            }
+          ]
+        },
+        {
+          "nombre": "Recursos",
+          "comandos": [
+            {
+              "cmd": "df -h",
+              "desc": "uso de disco",
+              "ejemplo": "df -h"
+            },
+            {
+              "cmd": "du -sh dir",
+              "desc": "tamaño de dir",
+              "ejemplo": "du -sh ~/Descargas"
+            },
+            {
+              "cmd": "free -h",
+              "desc": "uso de RAM",
+              "ejemplo": "free -h"
+            }
+          ]
+        },
+        {
+          "nombre": "Ayuda y ubicación",
+          "comandos": [
+            {
+              "cmd": "man command",
+              "desc": "manual",
+              "ejemplo": "man grep"
+            },
+            {
+              "cmd": "whereis app",
+              "desc": "binario, fuente, man",
+              "ejemplo": "whereis python3"
+            },
+            {
+              "cmd": "which app",
+              "desc": "cuál se ejecuta",
+              "ejemplo": "which python3"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "man",
+              "desc": "manuales",
+              "variantes": {
+                "u": "sudo apt install man-db manpages",
+                "f": "sudo dnf install man-db man-pages",
+                "a": "sudo pacman -S man-db man-pages"
+              }
+            }
+          ]
+        }
+      ],
+      "icono": "dialog-information-symbolic",
+      "slug": "info-sistema"
+    },
+    {
+      "nombre": "Git",
+      "icono": "vcs-commit-symbolic",
+      "slug": "git",
+      "grupos": [
+        {
+          "nombre": "Estado",
+          "comandos": [
+            {
+              "cmd": "git status",
+              "desc": "estado del repositorio",
+              "ejemplo": "git status"
+            },
+            {
+              "cmd": "git diff",
+              "desc": "cambios sin confirmar",
+              "ejemplo": "git diff"
+            }
+          ]
+        },
+        {
+          "nombre": "Confirmar",
+          "comandos": [
+            {
+              "cmd": "git add .",
+              "desc": "añadir todos los cambios",
+              "ejemplo": "git add ."
+            },
+            {
+              "cmd": "git add archivo",
+              "desc": "añadir un archivo",
+              "ejemplo": "git add notas.txt"
+            },
+            {
+              "cmd": "git commit -m \"mensaje\"",
+              "desc": "crear un commit",
+              "ejemplo": "git commit -m \"Arregla el inicio de sesión\""
+            },
+            {
+              "cmd": "git restore archivo",
+              "desc": "descartar los cambios de un archivo",
+              "ejemplo": "git restore notas.txt",
+              "peligro": "Pierde los cambios sin confirmar de ese archivo"
+            }
+          ]
+        },
+        {
+          "nombre": "Ramas",
+          "comandos": [
+            {
+              "cmd": "git branch",
+              "desc": "listar las ramas",
+              "ejemplo": "git branch"
+            },
+            {
+              "cmd": "git switch -c rama",
+              "desc": "crear una rama y cambiar a ella",
+              "ejemplo": "git switch -c feature/login"
+            },
+            {
+              "cmd": "git switch rama",
+              "desc": "cambiar de rama",
+              "ejemplo": "git switch main"
+            },
+            {
+              "cmd": "git branch -d rama",
+              "desc": "borrar una rama",
+              "ejemplo": "git branch -d feature/login"
+            }
+          ]
+        },
+        {
+          "nombre": "Remoto",
+          "comandos": [
+            {
+              "cmd": "git clone url",
+              "desc": "clonar un repositorio",
+              "ejemplo": "git clone https://github.com/usuario/repo.git"
+            },
+            {
+              "cmd": "git pull",
+              "desc": "traer los cambios remotos",
+              "ejemplo": "git pull"
+            },
+            {
+              "cmd": "git push",
+              "desc": "subir los commits",
+              "ejemplo": "git push"
+            },
+            {
+              "cmd": "git log --oneline -n 10",
+              "desc": "últimos commits",
+              "ejemplo": "git log --oneline -n 10"
+            }
+          ]
+        },
+        {
+          "nombre": "Recuperar",
+          "comandos": [
+            {
+              "cmd": "git stash",
+              "desc": "guardar los cambios aparte",
+              "ejemplo": "git stash"
+            },
+            {
+              "cmd": "git stash pop",
+              "desc": "recuperar lo guardado",
+              "ejemplo": "git stash pop"
+            },
+            {
+              "cmd": "git reset --hard HEAD~1",
+              "desc": "deshacer el último commit",
+              "ejemplo": "git reset --hard HEAD~1",
+              "peligro": "Borra los cambios que no estén confirmados"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Docker",
+      "icono": "application-x-executable-symbolic",
+      "slug": "docker",
+      "grupos": [
+        {
+          "nombre": "Ver",
+          "comandos": [
+            {
+              "cmd": "docker ps",
+              "desc": "contenedores en marcha",
+              "ejemplo": "docker ps"
+            },
+            {
+              "cmd": "docker ps -a",
+              "desc": "todos los contenedores",
+              "ejemplo": "docker ps -a"
+            },
+            {
+              "cmd": "docker images",
+              "desc": "imágenes locales",
+              "ejemplo": "docker images"
+            },
+            {
+              "cmd": "docker compose ps",
+              "desc": "estado de los servicios",
+              "ejemplo": "docker compose ps"
+            }
+          ]
+        },
+        {
+          "nombre": "Construir",
+          "comandos": [
+            {
+              "cmd": "docker build -t nombre .",
+              "desc": "construir una imagen",
+              "ejemplo": "docker build -t miapp ."
+            },
+            {
+              "cmd": "docker compose up -d",
+              "desc": "levantar en segundo plano",
+              "ejemplo": "docker compose up -d"
+            },
+            {
+              "cmd": "docker compose down",
+              "desc": "parar y borrar los contenedores",
+              "ejemplo": "docker compose down"
+            }
+          ]
+        },
+        {
+          "nombre": "Usar",
+          "comandos": [
+            {
+              "cmd": "docker run -d -p 8080:80 nombre",
+              "desc": "ejecutar un contenedor",
+              "ejemplo": "docker run -d -p 8080:80 nginx"
+            },
+            {
+              "cmd": "docker exec -it contenedor bash",
+              "desc": "entrar en el contenedor",
+              "ejemplo": "docker exec -it web bash"
+            },
+            {
+              "cmd": "docker logs -f contenedor",
+              "desc": "seguir los logs",
+              "ejemplo": "docker logs -f web"
+            },
+            {
+              "cmd": "docker stop contenedor",
+              "desc": "parar un contenedor",
+              "ejemplo": "docker stop web"
+            }
+          ]
+        },
+        {
+          "nombre": "Limpieza",
+          "comandos": [
+            {
+              "cmd": "docker volume ls",
+              "desc": "volúmenes",
+              "ejemplo": "docker volume ls"
+            },
+            {
+              "cmd": "docker system prune -a",
+              "desc": "borrar lo que no se usa",
+              "ejemplo": "docker system prune -a",
+              "peligro": "Elimina imágenes, contenedores y volúmenes sin usar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Entorno y shell",
+      "icono": "utilities-terminal-symbolic",
+      "slug": "entorno",
+      "grupos": [
+        {
+          "nombre": "Variables",
+          "comandos": [
+            {
+              "cmd": "export VAR=valor",
+              "desc": "definir una variable",
+              "ejemplo": "export EDITOR=nano"
+            },
+            {
+              "cmd": "env",
+              "desc": "ver todas las variables",
+              "ejemplo": "env"
+            },
+            {
+              "cmd": "echo $PATH",
+              "desc": "carpeta de ejecutables",
+              "ejemplo": "echo $PATH"
+            },
+            {
+              "cmd": "unset VAR",
+              "desc": "quitar una variable",
+              "ejemplo": "unset EDITOR"
+            }
+          ]
+        },
+        {
+          "nombre": "Alias",
+          "comandos": [
+            {
+              "cmd": "alias ll='ls -la'",
+              "desc": "crear un alias",
+              "ejemplo": "alias ll='ls -lah'"
+            },
+            {
+              "cmd": "alias",
+              "desc": "listar los alias",
+              "ejemplo": "alias"
+            },
+            {
+              "cmd": "unalias ll",
+              "desc": "borrar un alias",
+              "ejemplo": "unalias ll"
+            }
+          ]
+        },
+        {
+          "nombre": "Ficheros de inicio",
+          "comandos": [
+            {
+              "cmd": "source ~/.bashrc",
+              "desc": "recargar la configuración",
+              "ejemplo": "source ~/.bashrc"
+            },
+            {
+              "cmd": "~/.bashrc",
+              "desc": "configuración de bash",
+              "ejemplo": "nano ~/.bashrc"
+            },
+            {
+              "cmd": "~/.zshrc",
+              "desc": "configuración de zsh",
+              "ejemplo": "nano ~/.zshrc"
+            }
+          ]
+        },
+        {
+          "nombre": "Historial",
+          "comandos": [
+            {
+              "cmd": "history",
+              "desc": "comandos recientes",
+              "ejemplo": "history | tail"
+            },
+            {
+              "cmd": "!$",
+              "desc": "el último argumento",
+              "ejemplo": "mkdir -p /tmp/backup && cd !$"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Herramientas modernas",
+      "icono": "system-run-symbolic",
+      "slug": "modernas",
+      "grupos": [
+        {
+          "nombre": "Sustitutos de los clásicos",
+          "comandos": [
+            {
+              "cmd": "bat file",
+              "desc": "cat con colores y números de línea",
+              "ejemplo": "bat notas.txt"
+            },
+            {
+              "cmd": "eza -l",
+              "desc": "ls moderno con iconos y git",
+              "ejemplo": "eza -l --git"
+            },
+            {
+              "cmd": "fd patron",
+              "desc": "find moderno",
+              "ejemplo": "fd \"*.log\""
+            },
+            {
+              "cmd": "rg patron",
+              "desc": "grep moderno (ripgrep)",
+              "ejemplo": "rg \"TODO\" src/"
+            }
+          ]
+        },
+        {
+          "nombre": "Datos y búsqueda",
+          "comandos": [
+            {
+              "cmd": "jq '.clave' file.json",
+              "desc": "consultar un JSON",
+              "ejemplo": "jq '.name' package.json"
+            },
+            {
+              "cmd": "fzf",
+              "desc": "buscador interactivo",
+              "ejemplo": "fd | fzf"
+            },
+            {
+              "cmd": "tldr comando",
+              "desc": "resumen rápido de un comando",
+              "ejemplo": "tldr tar"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "bat",
+              "desc": "cat con colores",
+              "variantes": {
+                "u": "sudo apt install bat",
+                "f": "sudo dnf install bat",
+                "a": "sudo pacman -S bat"
+              }
+            },
+            {
+              "cmd": "fd",
+              "desc": "find moderno",
+              "variantes": {
+                "u": "sudo apt install fd-find",
+                "f": "sudo dnf install fd",
+                "a": "sudo pacman -S fd"
+              }
+            },
+            {
+              "cmd": "ripgrep",
+              "desc": "grep moderno",
+              "variantes": {
+                "u": "sudo apt install ripgrep",
+                "f": "sudo dnf install ripgrep",
+                "a": "sudo pacman -S ripgrep"
+              }
+            },
+            {
+              "cmd": "fzf",
+              "desc": "buscador interactivo",
+              "variantes": {
+                "u": "sudo apt install fzf",
+                "f": "sudo dnf install fzf",
+                "a": "sudo pacman -S fzf"
+              }
+            },
+            {
+              "cmd": "eza",
+              "desc": "ls moderno",
+              "variantes": {
+                "u": "sudo apt install eza",
+                "f": "sudo dnf install eza",
+                "a": "sudo pacman -S eza"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Atajos",
+      "grupos": [
+        {
+          "nombre": "Control",
+          "comandos": [
+            {
+              "cmd": "Ctrl+C",
+              "desc": "interrumpir",
+              "ejemplo": "ping google.com   # Ctrl+C para parar"
+            },
+            {
+              "cmd": "Ctrl+Z",
+              "desc": "detener",
+              "ejemplo": "sleep 100   # Ctrl+Z, luego bg"
+            },
+            {
+              "cmd": "Ctrl+D",
+              "desc": "salir (EOF)",
+              "ejemplo": "cat > nota.txt   # Ctrl+D guarda"
+            },
+            {
+              "cmd": "exit",
+              "desc": "cerrar sesión",
+              "ejemplo": "exit"
+            },
+            {
+              "cmd": "Ctrl+L",
+              "desc": "limpiar la terminal",
+              "ejemplo": "clear"
+            },
+            {
+              "cmd": "Ctrl+S",
+              "desc": "pausar la salida",
+              "ejemplo": "ping google.com   # Ctrl+S para pausar"
+            }
+          ]
+        },
+        {
+          "nombre": "Edición de línea",
+          "comandos": [
+            {
+              "cmd": "Ctrl+W",
+              "desc": "borrar palabra",
+              "ejemplo": "# borra la última palabra escrita"
+            },
+            {
+              "cmd": "Ctrl+U",
+              "desc": "borrar línea",
+              "ejemplo": "# borra toda la línea"
+            },
+            {
+              "cmd": "Ctrl+A",
+              "desc": "ir al inicio de la línea",
+              "ejemplo": "# sitúa el cursor al principio"
+            },
+            {
+              "cmd": "Ctrl+E",
+              "desc": "ir al final de la línea",
+              "ejemplo": "# sitúa el cursor al final"
+            },
+            {
+              "cmd": "Ctrl+K",
+              "desc": "borrar hasta el final",
+              "ejemplo": "# borra desde el cursor hasta el final"
+            },
+            {
+              "cmd": "Alt+.",
+              "desc": "repetir el último argumento",
+              "ejemplo": "mkdir -p /tmp/backup && cd !$"
+            }
+          ]
+        },
+        {
+          "nombre": "Historial",
+          "comandos": [
+            {
+              "cmd": "Ctrl+R",
+              "desc": "buscar en historial",
+              "ejemplo": "# escribe ssh para buscar el último"
+            },
+            {
+              "cmd": "!!",
+              "desc": "repetir el último",
+              "ejemplo": "sudo !!   # repite con sudo"
+            }
+          ]
+        }
+      ],
+      "icono": "input-keyboard-symbolic",
+      "slug": "atajos"
     }
   ]
 }

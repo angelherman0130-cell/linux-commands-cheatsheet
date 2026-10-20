@@ -42,6 +42,8 @@ code{font:13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:v
 .v{display:flex;gap:8px;align-items:baseline;margin:3px 0 3px 6px}
 .v b{font-size:11px;font-weight:500;color:var(--ac);background:var(--acbg);border-radius:4px;padding:1px 6px;flex:none;width:52px;text-align:center}
 .v code.x{flex:1;min-width:0;white-space:pre-wrap;word-break:break-word;font-size:12px}
+.p{color:#B3541E;font-size:12px;margin:0 0 4px 6px}
+@media (prefers-color-scheme:dark){.p{color:#F0A868}}
 #t[data-f="u"] .v:not([data-k="u"]),#t[data-f="f"] .v:not([data-k="f"]),#t[data-f="a"] .v:not([data-k="a"]){display:none}
 #q{width:100%;font:inherit;font-size:14px;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:10px}
 #q:focus{outline:2px solid var(--ac);outline-offset:-1px}
@@ -72,6 +74,7 @@ D.categorias.forEach(function(c,i){
       } else if(m.ejemplo){
         h+='<div class="ex">'+pre(m.ejemplo)+'</div>';
       }
+      if(m.peligro){h+='<div class="p">⚠ '+e(m.peligro)+'</div>'}
     });
   });
   t.insertAdjacentHTML('beforeend',h+'</div></div>');
@@ -163,6 +166,9 @@ def export_md(datos: dict[str, Any], destino: str | Path) -> Path:
                     lineas.append("```bash")
                     lineas.append(cmd["ejemplo"])
                     lineas.append("```")
+                    lineas.append("")
+                if cmd.get("peligro"):
+                    lineas.append(f"> ⚠️ **{cmd['peligro']}**")
                     lineas.append("")
 
     destino.write_text("\n".join(lineas).rstrip() + "\n", encoding="utf-8")
