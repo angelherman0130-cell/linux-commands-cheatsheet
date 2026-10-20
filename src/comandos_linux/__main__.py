@@ -40,6 +40,12 @@ def main(argv: list[str] | None = None) -> int:
         "--listar", action="store_true", help="Muestra las categorías y termina."
     )
     parser.add_argument(
+        "--idioma",
+        choices=["es", "en"],
+        default="es",
+        help="Idioma de la exportación (por defecto: es).",
+    )
+    parser.add_argument(
         "--version", action="version", version=f"comandos-linux {__version__}"
     )
     args = parser.parse_args(argv)
@@ -69,7 +75,7 @@ def main(argv: list[str] | None = None) -> int:
         destino = Path(args.export_md) if args.export_md else _ruta_por_defecto(
             "comandos-linux.md"
         )
-        exportar.export_md(datos, destino)
+        exportar.export_md(datos, destino, idioma=args.idioma)
         print(f"Markdown exportado a {destino}")
         return 0
 

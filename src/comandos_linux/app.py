@@ -12,6 +12,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk  # noqa: E402
 
 from . import datos as ds  # noqa: E402
+from . import i18n  # noqa: E402
 from . import exportar  # noqa: E402
 from . import prefs  # noqa: E402
 from . import vistas  # noqa: E402
@@ -30,7 +31,11 @@ class ComandosApp(Adw.Application):
             flags=Gio.ApplicationFlags.DEFAULT_FLAGS,
             **kwargs,
         )
-        self.datos = datos
+        self.datos_base = datos
+        self.idioma: str = prefs.valor("idioma", i18n.BASE) or i18n.BASE
+        if not i18n.disponible(self.idioma):
+            self.idioma = i18n.BASE
+        self.datos = i18n.aplicar(datos, self.idioma)
         self.ventana: "Ventana | None" = None
         self.distro: str = prefs.valor("distro", "todas") or "todas"
         self.favoritos: list[str] = prefs.favoritos()
@@ -77,6 +82,24 @@ class ComandosApp(Adw.Application):
         if self.ventana:
             self.ventana.about()
 
+    # -- idioma ----------------------------------------------------------
+    def texto(self, clave: str, defecto: str = "") -> str:
+        """Cadena de la interfaz en el idioma actual."""
+        return i18n.textos(self.idioma).get(clave, defecto)
+
+    def meta(self, clave: str, defecto: str = "") -> str:
+        return i18n.meta(self.idioma).get(clave, defecto)
+
+    def cambiar_idioma(self, idioma: str) -> None:
+        """Cambia el idioma de la interfaz y de los datos."""
+        if not i18n.disponible(idioma) or idioma == self.idioma:
+            return
+        self.idioma = idioma
+        prefs.guardar(idioma=idioma)
+        self.datos = i18n.aplicar(self.datos_base, idioma)
+        if self.ventana:
+            self.ventana.recargar()
+
     # -- estado ----------------------------------------------------------
     def alternar_favorito(self, clave: str) -> bool:
         marcado = prefs.alternar_favorito(clave)
@@ -113,6 +136,11 @@ class Ventana(Adw.ApplicationWindow):
 
         ultima = prefs.valor("pagina", "favoritos")
         self.ir_a(ultima if ultima in self.paginas else "favoritos")
+
+    @property
+    def t(self) -> dict:
+        """Cadenas de la interfaz en el idioma actual."""
+        return i18n.textos(self.app.idioma)
 
     # -- construcción ----------------------------------------------------
     def _construir(self) -> None:
@@ -152,9 +180,12 @@ class Ventana(Adw.ApplicationWindow):
         self.grupo_distro.connect("notify::active", self._al_cambiar_distro)
         self.grupo_distro.add_css_class("filtro-distro")
 
-        etiqueta_filtro = Gtk.Label(label="DISTRIBUCIÓN")
+        etiqueta_filtro = Gtk.Label(
+            label=self.t.get("seccion_distribucion", "DISTRIBUCIÓN")
+        )
         etiqueta_filtro.add_css_class("lateral-seccion")
         etiqueta_filtro.set_xalign(0)
+        self.etiqueta_distribucion = etiqueta_filtro
         caja.append(etiqueta_filtro)
         caja.append(self.grupo_distro)
 
@@ -163,6 +194,26 @@ class Ventana(Adw.ApplicationWindow):
         self.lista_lateral.add_css_class("lista-lateral")
         self.lista_lateral.connect("row-activated", self._al_activar_lateral)
         caja.append(self.lista_lateral)
+
+        # Selector de idioma
+        pie = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        pie.add_css_class("pie-lateral")
+        icono = Gtk.Image.new_from_icon_name("preferences-desktop-locale-symbolic")
+        icono.add_css_class("icono-lateral")
+        pie.append(icono)
+        etiqueta_idioma = Gtk.Label(label=self.t.get("seccion_idioma", "IDIOMA"))
+        etiqueta_idioma.add_css_class("lateral-detalle")
+        pie.append(etiqueta_idioma)
+        self.etiqueta_idioma = etiqueta_idioma
+        self.selector_idioma = Gtk.DropDown.new_from_strings(
+            [i18n.IDIOMAS["es"], i18n.IDIOMAS["en"]]
+        )
+        self.selector_idioma.set_selected(0 if self.app.idioma == "es" else 1)
+        self.selector_idioma.set_hexpand(True)
+        self.selector_idioma.connect("notify::selected", self._al_seleccionar_idioma)
+        pie.append(self.selector_idioma)
+        caja.append(pie)
+
         toolbar.set_content(caja)
 
         pagina.set_child(toolbar)
@@ -178,7 +229,9 @@ class Ventana(Adw.ApplicationWindow):
         self.titulo_pagina = Adw.WindowTitle(title="Comandos Linux", subtitle="")
         self.buscador = Gtk.SearchEntry()
         self.buscador.set_hexpand(True)
-        self.buscador.set_placeholder_text("Buscar comando, descripción o ejemplo…")
+        self.buscador.set_placeholder_text(
+            self.t.get("buscar_placeholder", "Buscar comando, descripción o ejemplo…")
+        )
         self.buscador.connect("search-changed", self._al_buscar)
 
         pila_titulo = Gtk.Stack()
@@ -190,13 +243,14 @@ class Ventana(Adw.ApplicationWindow):
 
         boton_buscar = Gtk.ToggleButton(icon_name="system-search-symbolic")
         boton_buscar.add_css_class("flat-round")
-        boton_buscar.set_tooltip_text("Buscar (Ctrl+K)")
+        boton_buscar.set_tooltip_text(self.t.get("tooltip_buscar", "Buscar (Ctrl+K)"))
         boton_buscar.connect("toggled", self._al_toggle_busqueda)
         self.boton_buscar = boton_buscar
 
         boton_menu = Gtk.MenuButton(icon_name="open-menu-symbolic")
-        boton_menu.set_menu_model(self.menu)
-        boton_menu.set_tooltip_text("Menú")
+        boton_menu.set_menu_model(self._menu())
+        boton_menu.set_tooltip_text(self.t.get("tooltip_menu", "Menú"))
+        self.boton_menu = boton_menu
 
         # El orden de pack_end es inverso: el último empaquetado queda a la derecha.
         header.pack_end(boton_menu)
@@ -256,19 +310,20 @@ class Ventana(Adw.ApplicationWindow):
         return self._pagina_favoritos()
 
     def _menu(self) -> Gio.Menu:
+        t = self.t
         menu = Gio.Menu()
 
         navegacion = Gio.Menu()
-        navegacion.append("Buscar…", "app.buscar")
-        navegacion.append("Favoritos", "app.favoritos")
+        navegacion.append(t.get("menu_buscar", "Buscar…"), "app.buscar")
+        navegacion.append(t.get("menu_favoritos", "Favoritos"), "app.favoritos")
         menu.append_section(None, navegacion)
 
         export = Gio.Menu()
-        export.append("Exportar a HTML…", "app.exportar-html")
-        export.append("Exportar a Markdown…", "app.exportar-md")
+        export.append(t.get("menu_exportar_html", "Exportar a HTML…"), "app.exportar-html")
+        export.append(t.get("menu_exportar_md", "Exportar a Markdown…"), "app.exportar-md")
         menu.append_section(None, export)
 
-        menu.append("Acerca de Comandos Linux", "app.about")
+        menu.append(t.get("menu_acerca", "Acerca de Comandos Linux"), "app.about")
         return menu
 
     def _cargar_css(self) -> None:
@@ -330,6 +385,21 @@ class Ventana(Adw.ApplicationWindow):
                 return True
         return False
 
+    def recargar(self) -> None:
+        """Recarga la ventana tras un cambio de idioma."""
+        self.indices = ds.indice(self.app.datos)
+        self.etiqueta_distribucion.set_label(
+            self.t.get("seccion_distribucion", "DISTRIBUCIÓN")
+        )
+        self.etiqueta_idioma.set_label(self.t.get("seccion_idioma", "IDIOMA"))
+        self.buscador.set_placeholder_text(
+            self.t.get("buscar_placeholder", "Buscar comando, descripción o ejemplo…")
+        )
+        self.boton_menu.set_menu_model(self._menu())
+        self.selector_idioma.set_selected(0 if self.app.idioma == "es" else 1)
+        self._rellenar()
+        self._actualizar_titulo()
+
     # -- navegación ------------------------------------------------------
     def ir_a(self, slug: str) -> None:
         if slug not in self.paginas:
@@ -342,21 +412,27 @@ class Ventana(Adw.ApplicationWindow):
     def _actualizar_titulo(self) -> None:
         slug = self.pila.get_visible_child_name() or "favoritos"
         if slug == "favoritos":
-            self.titulo_pagina.set_title("Favoritos")
+            self.titulo_pagina.set_title(self.t.get("titulo_favoritos", "Favoritos"))
             self.titulo_pagina.set_subtitle(
-                f"{len(self.app.favoritos)} comandos guardados"
+                self.t.get("subtitulo_favoritos", "{n} comandos guardados").format(
+                    n=len(self.app.favoritos)
+                )
             )
         elif slug == "resultados":
-            self.titulo_pagina.set_title("Resultados")
+            self.titulo_pagina.set_title(self.t.get("titulo_resultados", "Resultados"))
             self.titulo_pagina.set_subtitle(
-                f"{self._cuenta_resultados()} coincidencias"
+                self.t.get("subtitulo_resultados", "{n} coincidencias").format(
+                    n=self._cuenta_resultados()
+                )
             )
         else:
             for categoria in self.app.datos["categorias"]:
                 if categoria["slug"] == slug:
                     total = sum(len(g["comandos"]) for g in categoria["grupos"])
                     self.titulo_pagina.set_title(categoria["nombre"])
-                    self.titulo_pagina.set_subtitle(f"{total} comandos")
+                    self.titulo_pagina.set_subtitle(
+                        self.t.get("subtitulo_comandos", "{n} comandos").format(n=total)
+                    )
                     break
 
     def _cuenta_resultados(self) -> int:
@@ -409,7 +485,7 @@ class Ventana(Adw.ApplicationWindow):
             hijo = siguiente
 
         if self.app.favoritos:
-            lista.append(vistas.seccion_lateral("FAVORITOS"))
+            lista.append(vistas.seccion_lateral(self.t.get("seccion_favoritos", "FAVORITOS")))
             for clave in self.app.favoritos:
                 entrada = self.indices.get(clave)
                 if not entrada:
@@ -426,7 +502,7 @@ class Ventana(Adw.ApplicationWindow):
                 fila.slug = categoria["slug"]
                 lista.append(fila)
 
-        lista.append(vistas.seccion_lateral("CATEGORÍAS"))
+        lista.append(vistas.seccion_lateral(self.t.get("seccion_categorias", "CATEGORÍAS")))
         for categoria in self.app.datos["categorias"]:
             total = sum(len(g["comandos"]) for g in categoria["grupos"])
             fila = vistas.fila_lateral(
@@ -436,6 +512,11 @@ class Ventana(Adw.ApplicationWindow):
             )
             fila.slug = categoria["slug"]
             lista.append(fila)
+
+    def _al_seleccionar_idioma(self, selector: Gtk.DropDown, _param) -> None:
+        nuevo = "es" if selector.get_selected() == 0 else "en"
+        if nuevo != self.app.idioma:
+            self.app.cambiar_idioma(nuevo)
 
     def _al_activar_lateral(self, _lista, fila: Gtk.ListBoxRow) -> None:
         slug = fila.slug
@@ -450,8 +531,11 @@ class Ventana(Adw.ApplicationWindow):
             caja.append(
                 self._estado_vacio(
                     "starred-symbolic",
-                    "Sin favoritos todavía",
-                    "Pulsa la estrella de un comando para guardarlo aquí.",
+                    self.t.get("vacio_favoritos_titulo", "Sin favoritos todavía"),
+                    self.t.get(
+                        "vacio_favoritos_texto",
+                        "Pulsa la estrella de un comando para guardarlo aquí.",
+                    ),
                 )
             )
             return
@@ -484,17 +568,23 @@ class Ventana(Adw.ApplicationWindow):
         if not self.app.texto.strip():
             self._mostrar_estado(
                 "system-search-symbolic",
-                "Busca un comando",
-                "Escribe arriba para filtrar los 91 comandos por nombre, "
-                "descripción o ejemplo.",
+                self.t.get("vacio_buscar_titulo", "Busca un comando"),
+                self.t.get(
+                    "vacio_buscar_texto",
+                    "Escribe arriba para filtrar los comandos por nombre, "
+                    "descripción o ejemplo.",
+                ),
             )
             return
 
         if not coincidencias:
             self._mostrar_estado(
                 "system-search-symbolic",
-                "Sin resultados",
-                f"No hay ningún comando que coincida con «{self.app.texto}».",
+                self.t.get("vacio_sin_resultados_titulo", "Sin resultados"),
+                self.t.get(
+                    "vacio_sin_resultados_texto",
+                    "No hay ningún comando que coincida con «{texto}».",
+                ).format(texto=self.app.texto),
             )
             return
 
@@ -562,6 +652,7 @@ class Ventana(Adw.ApplicationWindow):
             self._al_copiar,
             self._al_alternar_favorito,
             variantes,
+            self.t,
         )
         if con_ruta:
             ruta = Gtk.Label(label=f"{categoria['nombre']}  ›  {grupo['nombre']}")
@@ -585,13 +676,16 @@ class Ventana(Adw.ApplicationWindow):
     def _al_copiar(self, _boton, texto: str) -> None:
         portapapeles = self.get_display().get_clipboard()
         portapapeles.set(texto)
-        self.aviso("Copiado al portapapeles")
+        self.aviso(self.t.get("copiado", "Copiado al portapapeles"))
 
     def _al_alternar_favorito(self, _boton, clave: str) -> None:
         marcado = self.app.alternar_favorito(clave)
         self._rellenar()
         self.aviso(
-            "Añadido a favoritos" if marcado else "Quitado de favoritos"
+            self.t.get(
+                "anadido_favorito" if marcado else "quitado_favorito",
+                "Añadido a favoritos" if marcado else "Quitado de favoritos",
+            )
         )
 
     def aviso(self, mensaje: str) -> None:
@@ -599,7 +693,11 @@ class Ventana(Adw.ApplicationWindow):
         self.toasts.add_toast(toast)
 
     def exportar(self, formato: str) -> None:
-        titulo = "Exportar a HTML" if formato == "html" else "Exportar a Markdown"
+        titulo = (
+            self.t.get("dialogo_html", "Exportar a HTML")
+            if formato == "html"
+            else self.t.get("dialogo_md", "Exportar a Markdown")
+        )
         nombre = "comandos-linux.html" if formato == "html" else "comandos-linux.md"
         dialogo = Gtk.FileDialog(title=titulo, initial_name=nombre)
 
@@ -609,20 +707,30 @@ class Ventana(Adw.ApplicationWindow):
             except GLib.Error as error:
                 if error.matches(Gtk.dialog_error_quark(), Gtk.DialogError.DISMISSED):
                     return
-                self.aviso(f"No se pudo exportar: {error.message}")
+                self.aviso(
+                    self.t.get("error_exportar", "No se pudo exportar: {error}").format(
+                        error=error.message
+                    )
+                )
                 return
             ruta = archivo.get_path()
             if not ruta:
                 return
             try:
                 if _f == "html":
-                    exportar.export_html(self.app.datos, ruta)
+                    exportar.export_html(
+                        self.app.datos, ruta, base=self.app.datos_base
+                    )
                 else:
                     exportar.export_md(self.app.datos, ruta)
             except OSError as error:
-                self.aviso(f"No se pudo escribir: {error}")
+                self.aviso(
+                    self.t.get("error_escribir", "No se pudo escribir: {error}").format(
+                        error=error
+                    )
+                )
                 return
-            self.aviso(f"Exportado a {ruta}")
+            self.aviso(self.t.get("exportado", "Exportado a {ruta}").format(ruta=ruta))
 
         dialogo.save_async(self, None, terminado)
 
@@ -631,10 +739,13 @@ class Ventana(Adw.ApplicationWindow):
             transient_for=self,
             application_name="Comandos Linux",
             application_icon="comandos-linux",
-            version="1.2.0",
+            version="1.3.0",
             developer="Angel Herman",
-            comments="Chuleta de comandos Linux para Ubuntu, Fedora y Arch. "
-            "Funciona sin conexión a internet.",
+            comments=self.t.get(
+                "about_comentarios",
+                "Chuleta de comandos Linux para Ubuntu, Fedora y Arch. "
+                "Funciona sin conexión a internet.",
+            ),
             license_type=Gtk.License.GPL_3_0,
         )
         ventana.present()

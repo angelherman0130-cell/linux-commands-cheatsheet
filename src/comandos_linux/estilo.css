@@ -257,3 +257,13 @@
   font-size: 14px;
   color: var(--dim);
 }
+
+/* --- pie de la barra lateral (idioma) ---------------------------------- */
+
+.pie-lateral {
+  margin: 8px 12px 12px 12px;
+  padding: 8px 10px;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: var(--card-line);
+}

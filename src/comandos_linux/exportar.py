@@ -50,19 +50,27 @@ code{font:13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:v
 .hidden{display:none!important}
 #info{font-size:13px;color:var(--tx2);margin:0 0 10px}
 </style></head><body><main>
-<h1>__TITULO__</h1><p class="sub">__SUBTITULO__</p>
+<h1 id="titulo">__TITULO__</h1><p class="sub" id="sub">__SUBTITULO__</p>
 <input id="q" type="search" placeholder="Buscar comando, descripción o ejemplo…" autocomplete="off">
-<div class="seg" id="s"><button class="on" data-f="">Todas</button><button data-f="u">Ubuntu</button><button data-f="f">Fedora</button><button data-f="a">Arch</button></div>
-<p class="note">__NOTA__</p>
+<div class="seg" id="s"><button class="on" data-f="">__TODAS__</button><button data-f="u">Ubuntu</button><button data-f="f">Fedora</button><button data-f="a">Arch</button></div>
+<div class="seg" id="l"><button class="on" data-l="es">Español</button><button data-l="en">English</button></div>
+<p class="note" id="nota">__NOTA__</p>
 <div class="bar"><button id="ex">Expandir todo</button><button id="co">Contraer todo</button></div>
 <p id="info"></p>
 <div class="root">Linux</div><div class="tree" id="t"></div></main>
 <script>
-var D=__DATOS__, N=__DISTROS__;
+var DATA=__DATOS__, N=__DISTROS__, UI=__UI__;
+var LANG='es';
+(function(){var m=/lang=(es|en)/.exec(location.search+location.hash);if(m)LANG=m[1]})();
 function e(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function pre(x){return (x[0]=='#'?'':'$ ')+e(x)}
+function tr(k){return (UI[LANG]&&UI[LANG][k])||''}
 var t=document.getElementById('t');
-D.categorias.forEach(function(c,i){
+function render(){
+  t.innerHTML='';
+  document.querySelectorAll('#l button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-l')==LANG)});
+  var D=DATA[LANG];
+  D.categorias.forEach(function(c,i){
   var n=0;c.grupos.forEach(function(g){n+=g.comandos.length});
   var h='<div class="cat"><button class="hd" aria-expanded="false">'+(i+1)+'. '+e(c.nombre)+'<span class="n">'+n+'</span></button><div class="body">';
   c.grupos.forEach(function(g){
@@ -78,7 +86,9 @@ D.categorias.forEach(function(c,i){
     });
   });
   t.insertAdjacentHTML('beforeend',h+'</div></div>');
-});
+  });
+  t.firstChild.classList.add('open');
+}
 function all(v){document.querySelectorAll('.cat').forEach(function(x){x.classList.toggle('open',v);x.firstChild.setAttribute('aria-expanded',v)})}
 t.addEventListener('click',function(x){var b=x.target.closest('.hd');if(!b)return;var o=b.parentNode.classList.toggle('open');b.setAttribute('aria-expanded',o)});
 document.getElementById('s').addEventListener('click',function(x){var b=x.target.closest('button');if(!b)return;
@@ -108,22 +118,56 @@ function filtrar(){
     if(visible&&txt){cat.classList.add('open');cat.firstChild.setAttribute('aria-expanded','true')}
     hits+=visible?1:0;
   });
-  document.getElementById('info').textContent=txt?(hits+' categoría(s) coinciden'):'';
+  document.getElementById('info').textContent=txt?(hits+' '+tr('coincidencias')):'';
 }
-t.firstChild.classList.add('open');
+document.getElementById('l').addEventListener('click',function(x){var b=x.target.closest('button');if(!b)return;
+  this.querySelectorAll('button').forEach(function(y){y.classList.toggle('on',y===b)});
+  LANG=b.getAttribute('data-l');aplicarIdioma();render();filtrar()});
+function aplicarIdioma(){
+  document.getElementById('titulo').textContent=tr('titulo');
+  document.getElementById('sub').textContent=tr('subtitulo');
+  document.getElementById('nota').textContent=tr('nota');
+  document.getElementById('q').placeholder=tr('buscar_placeholder');
+  document.getElementById('ex').textContent=tr('expandir');
+  document.getElementById('co').textContent=tr('contraer');
+  document.getElementById('s').firstChild.textContent=tr('todas');
+}
+aplicarIdioma();
+render();
 </script></body></html>
 """
 
 
-def export_html(datos: dict[str, Any], destino: str | Path) -> Path:
-    """Escribe un HTML autocontenido (funciona sin conexión)."""
+def export_html(
+    datos: dict[str, Any],
+    destino: str | Path,
+    idiomas: tuple[str, ...] = ("es", "en"),
+    base: dict[str, Any] | None = None,
+) -> Path:
+    """Escribe un HTML autocontenido (funciona sin conexión).
+
+    Incluye los idiomas indicados con un selector para cambiar entre ellos.
+    """
+    from . import i18n
+
     destino = Path(destino)
+    base = base if base is not None else datos
+
+    por_idioma = {}
+    textos = {}
+    for idioma in idiomas:
+        por_idioma[idioma] = i18n.aplicar(base, idioma)
+        textos[idioma] = i18n.textos_html(idioma)
+
+    principal = por_idioma.get("es", next(iter(por_idioma.values())))
     pagina = (
-        PLANTILLA_HTML.replace("__TITULO__", html.escape(datos.get("titulo", "Comandos Linux")))
-        .replace("__SUBTITULO__", html.escape(datos.get("subtitulo", "")))
-        .replace("__NOTA__", html.escape(datos.get("nota", "")))
+        PLANTILLA_HTML.replace("__TITULO__", html.escape(principal.get("titulo", "Comandos Linux")))
+        .replace("__SUBTITULO__", html.escape(principal.get("subtitulo", "")))
+        .replace("__NOTA__", html.escape(principal.get("nota", "")))
+        .replace("__TODAS__", html.escape(textos.get("es", {}).get("todas", "Todas")))
         .replace("__DISTROS__", json.dumps(datos.get("distros", {}), ensure_ascii=False))
-        .replace("__DATOS__", json.dumps(datos, ensure_ascii=False))
+        .replace("__UI__", json.dumps(textos, ensure_ascii=False))
+        .replace("__DATOS__", json.dumps(por_idioma, ensure_ascii=False))
     )
     destino.write_text(pagina, encoding="utf-8")
     return destino
@@ -134,9 +178,18 @@ def export_html(datos: dict[str, Any], destino: str | Path) -> Path:
 # --------------------------------------------------------------------------
 
 
-def export_md(datos: dict[str, Any], destino: str | Path) -> Path:
-    """Escribe la chuleta completa en Markdown."""
+def export_md(
+    datos: dict[str, Any],
+    destino: str | Path,
+    idioma: str = "es",
+    base: dict[str, Any] | None = None,
+) -> Path:
+    """Escribe la chuleta completa en Markdown, en el idioma indicado."""
+    from . import i18n
+
     destino = Path(destino)
+    if idioma != i18n.BASE:
+        datos = i18n.aplicar(base if base is not None else datos, idioma)
     lineas: list[str] = []
 
     lineas.append(f"# {datos.get('titulo', 'Comandos Linux')}")

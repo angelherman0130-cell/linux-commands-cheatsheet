@@ -47,6 +47,21 @@ muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver
 
 ![Avisos de comandos destructivos](docs/captura-peligro.png)
 
+## 🌍 Dos idiomas
+
+La app está **en español e inglés**: no solo los botones, también las
+descripciones, los ejemplos, los avisos y los nombres de las categorías.
+El selector está **al pie de la barra lateral** y la preferencia se recuerda
+al cerrar la app.
+
+![La app en inglés](docs/captura-ingles.png)
+
+En inglés, la búsqueda también busca en inglés: escribe `permissions` y
+encuentra `chmod`, `chown`… aunque el comando esté en español.
+
+El HTML exportado lleva su propio selector de idioma y acepta el parámetro
+`?lang=en` (o `#lang=en`) para abrirlo directamente en inglés.
+
 ## ✨ Funciones
 
 | | |
@@ -56,6 +71,7 @@ muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver
 | ⭐ Favoritos | Estrella en cada comando; se guardan entre sesiones |
 | 📋 Copiar | Clic en el comando o en el ejemplo; el portapapeles se actualiza solo |
 | ⚠️ Avisos | Los comandos destructivos se marcan con un aviso en ámbar |
+| 🌍 Idiomas | Español e inglés, conmutable al instante y sin reiniciar |
 | ⌨️ Atajos | `Ctrl+K` buscar · `Ctrl+1..9` ir a la categoría N · `Ctrl+C` copiar el seleccionado |
 | 📤 Exportar | A HTML autocontenido o a Markdown, desde el menú ☰ |
 | 🌓 Tema | Claro/oscuro automático según el sistema |
@@ -117,6 +133,7 @@ comandos-linux              # abre la app
 comandos-linux --listar     # lista las categorías en la terminal
 comandos-linux --export-html comandos-linux.html
 comandos-linux --export-md comandos-linux.md
+comandos-linux --export-md comandos-linux-en.md --idioma en
 comandos-linux --version
 ```
 
@@ -186,14 +203,16 @@ linux-commands-cheatsheet/
 ├── install.sh / uninstall.sh     # instalación en el usuario
 ├── pyproject.toml                # metadatos (permite pip install .)
 ├── src/comandos_linux/
-│   ├── __main__.py               # CLI: --export-html, --export-md, --listar
+│   ├── __main__.py               # CLI: --export-html, --export-md, --idioma, --listar
 │   ├── app.py                    # ventana: barra lateral + panel de contenido
 │   ├── vistas.py                 # constructores de widgets (filas, tarjetas, chips)
-│   ├── prefs.py                  # favoritos y preferencias persistentes
+│   ├── i18n.py                   # carga de traducciones y aplicación al dataset
+│   ├── i18n/en.json              # ← las traducciones al inglés
+│   ├── prefs.py                  # favoritos, idioma y preferencias persistentes
 │   ├── datos.py                  # carga, búsqueda y filtrado
 │   ├── exportar.py               # exportadores HTML y Markdown
 │   ├── estilo.css                # paleta y estilos
-│   └── datos/comandos.json       # ← el dataset (fuente única)
+│   └── datos/comandos.json       # ← el dataset (fuente única, en español)
 ├── assets/
 │   ├── desktop/comandos-linux.desktop
 │   └── iconos/comandos-linux.svg
@@ -202,6 +221,25 @@ linux-commands-cheatsheet/
 
 Los favoritos y la última categoría visitada se guardan en
 `~/.config/linux-commands-cheatsheet/estado.json` (se crea solo).
+
+### Traducir a otro idioma
+
+El español es el idioma base y vive en `datos/comandos.json`. Para añadir un
+tercer idioma:
+
+1. Copia `src/comandos_linux/i18n/en.json` como `i18n/fr.json` y traduce sus
+   apartados (`meta`, `ui`, `categorias`, `grupos`, `comandos`, `ejemplos`,
+   `peligros`).
+2. Registra el idioma en `i18n.py`:
+
+```python
+IDIOMAS = {"es": "Español", "en": "English", "fr": "Français"}
+```
+
+3. Añade el nombre a `HTML_BASE` para el HTML exportado.
+
+Las traducciones se indexan **por el texto original**, así que basta con
+traducir cada frase una vez aunque aparezca en varios comandos.
 
 ## 🛠️ Desarrollo
 
@@ -231,6 +269,11 @@ the commands you use most at hand. Live search shows flat results with the
 category of each match, one click copies any command or example, destructive
 commands are flagged with a warning, and the whole cheat sheet can be exported
 to a standalone HTML file or to Markdown.
+
+The interface and every description ship in **Spanish and English**, switchable
+from the sidebar — and the choice is remembered between sessions. Search works
+in the selected language too, so typing `permissions` in English finds
+`chmod` and `chown`.
 
 The dataset lives in a single JSON file, so adding or fixing a command is a
 one-line edit — the app, the HTML export and the Markdown export are all

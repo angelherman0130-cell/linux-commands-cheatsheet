@@ -122,11 +122,16 @@ def clave_de(categoria: str, grupo: str, cmd: str) -> str:
 
 
 def indice(datos: dict[str, Any]) -> dict[str, tuple[dict, dict, dict]]:
-    """Mapa clave -> (categoría, grupo, comando) de todos los comandos."""
+    """Mapa clave -> (categoría, grupo, comando) de todos los comandos.
+
+    La clave es estable entre idiomas (se calcula con los nombres originales).
+    """
     salida: dict[str, tuple[dict, dict, dict]] = {}
     for categoria in datos.get("categorias", []):
         for grupo in categoria.get("grupos", []):
             for cmd in grupo.get("comandos", []):
-                clave = clave_de(categoria["nombre"], grupo["nombre"], cmd["cmd"])
+                clave = cmd.get("clave") or clave_de(
+                    categoria["nombre"], grupo["nombre"], cmd["cmd"]
+                )
                 salida[clave] = (categoria, grupo, cmd)
     return salida

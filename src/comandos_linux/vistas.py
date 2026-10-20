@@ -27,24 +27,29 @@ def insignia(texto: str) -> Gtk.Label:
     return etiqueta
 
 
-def insignia_peligro() -> Gtk.Label:
+def insignia_peligro(t: dict | None = None) -> Gtk.Label:
     etiqueta = Gtk.Label(label="⚠")
     etiqueta.add_css_class("insignia-peligro")
-    etiqueta.set_tooltip_text("Comando destructivo: lee el aviso antes de ejecutarlo")
+    etiqueta.set_tooltip_text(
+        (t or {}).get(
+            "tooltip_peligro",
+            "Comando destructivo: lee el aviso antes de ejecutarlo",
+        )
+    )
     return etiqueta
 
 
-def chip_boton(texto: str, al_copiar: Callable) -> Gtk.Button:
+def chip_boton(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Button:
     """El comando en sí: al pulsarlo se copia."""
     boton = Gtk.Button()
     boton.add_css_class("chip-btn")
     boton.set_child(chip(texto))
-    boton.set_tooltip_text("Copiar el comando")
+    boton.set_tooltip_text((t or {}).get("tooltip_copiar_comando", "Copiar el comando"))
     boton.connect("clicked", al_copiar, texto)
     return boton
 
 
-def ejemplo_boton(texto: str, al_copiar: Callable) -> Gtk.Button:
+def ejemplo_boton(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Button:
     """Una línea de ejemplo: al pulsarla se copia."""
     boton = Gtk.Button()
     boton.add_css_class("ejemplo-btn")
@@ -57,20 +62,22 @@ def ejemplo_boton(texto: str, al_copiar: Callable) -> Gtk.Button:
     etiqueta.set_hexpand(True)
     boton.set_child(etiqueta)
     boton.set_hexpand(True)
-    boton.set_tooltip_text("Copiar el ejemplo")
+    boton.set_tooltip_text((t or {}).get("tooltip_copiar_ejemplo", "Copiar el ejemplo"))
     boton.connect("clicked", al_copiar, texto)
     return boton
 
 
-def boton_copiar(texto: str, al_copiar: Callable) -> Gtk.Button:
+def boton_copiar(texto: str, al_copiar: Callable, t: dict | None = None) -> Gtk.Button:
     boton = Gtk.Button(icon_name="edit-copy-symbolic")
     boton.add_css_class("icono-btn")
-    boton.set_tooltip_text("Copiar al portapapeles")
+    boton.set_tooltip_text((t or {}).get("tooltip_copiar", "Copiar al portapapeles"))
     boton.connect("clicked", al_copiar, texto)
     return boton
 
 
-def boton_estrella(marcado: bool, clave: str, al_alternar: Callable) -> Gtk.Button:
+def boton_estrella(
+    marcado: bool, clave: str, al_alternar: Callable, t: dict | None = None
+) -> Gtk.Button:
     boton = Gtk.Button(
         icon_name="starred-symbolic" if marcado else "non-starred-symbolic"
     )
@@ -78,8 +85,12 @@ def boton_estrella(marcado: bool, clave: str, al_alternar: Callable) -> Gtk.Butt
     boton.add_css_class("estrella-btn")
     if marcado:
         boton.add_css_class("marcado")
+    textos = t or {}
     boton.set_tooltip_text(
-        "Quitar de favoritos" if marcado else "Añadir a favoritos"
+        textos.get(
+            "tooltip_quitar_favorito" if marcado else "tooltip_anadir_favorito",
+            "Quitar de favoritos" if marcado else "Añadir a favoritos",
+        )
     )
     boton.connect("clicked", al_alternar, clave)
     return boton
@@ -96,6 +107,7 @@ def fila_comando(
     al_copiar: Callable,
     al_alternar: Callable,
     variantes: list[tuple[str, str]],
+    t: dict | None = None,
 ) -> Gtk.Box:
     """Fila completa de un comando: estrella, chip, descripción y ejemplos."""
     fila = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
@@ -104,10 +116,10 @@ def fila_comando(
     arriba = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
     arriba.add_css_class("fila-principal")
 
-    arriba.append(boton_estrella(marcado, clave, al_alternar))
+    arriba.append(boton_estrella(marcado, clave, al_alternar, t))
     if cmd.get("peligro"):
-        arriba.append(insignia_peligro())
-    arriba.append(chip_boton(cmd.get("cmd", ""), al_copiar))
+        arriba.append(insignia_peligro(t))
+    arriba.append(chip_boton(cmd.get("cmd", ""), al_copiar, t))
 
     descripcion = Gtk.Label(label=cmd.get("desc", ""))
     descripcion.add_css_class("cmd-desc")
@@ -121,7 +133,7 @@ def fila_comando(
         copiable = cmd["variantes"].get(distro) or next(
             iter(cmd["variantes"].values())
         )
-    arriba.append(boton_copiar(copiable, al_copiar))
+    arriba.append(boton_copiar(copiable, al_copiar, t))
     fila.append(arriba)
 
     ejemplos = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
@@ -130,7 +142,7 @@ def fila_comando(
         linea = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         if clave_distro:
             linea.append(insignia(clave_distro))
-        linea.append(ejemplo_boton(_con_prefijo(texto), al_copiar))
+        linea.append(ejemplo_boton(_con_prefijo(texto), al_copiar, t))
         ejemplos.append(linea)
     if variantes:
         fila.append(ejemplos)
