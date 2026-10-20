@@ -12,5 +12,5 @@ Icon=comandos-linux
 Terminal=false
 StartupNotify=true
 StartupWMClass=io.github.angelherman0130.LinuxCommandsCheatsheet
-Categories=Utility;Education;Development;
+Categories=Utility;
 Keywords=linux;comandos;commands;terminal;consola;ubuntu;fedora;arch;cheatsheet;chuleta;
