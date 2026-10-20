@@ -1,8 +1,8 @@
 """Translations of the interface and of the command dataset.
 
-El español es el idioma base (los datos viven en el JSON). El inglés se
-guarda en ``i18n/en.json`` y se aplica sobre una copia del dataset, de modo
-que la búsqueda, los filtros y los favoritos funcionan igual en ambos idiomas.
+Spanish is the base language (the data lives in the JSON). English is
+stored in ``i18n/en.json`` and applied on top of a copy of the dataset, so
+that search, filters and favourites behave the same in both languages.
 """
 
 from __future__ import annotations
@@ -76,10 +76,10 @@ def _clave(categoria: str, grupo: str, cmd: str) -> str:
 def aplicar(datos: dict[str, Any], idioma: str) -> dict[str, Any]:
     """Returns a copy of the dataset with the texts of the given language.
 
-    Las traducciones se indexan por el texto original en español, así que
-    solo hay que traducir cada frase una vez. Cada comando conserva además
-    una clave estable (``clave``) calculada con los nombres originales, para
-    que los favoritos no cambien al cambiar de idioma.
+    Translations are indexed by the original Spanish text, so each phrase
+    only has to be translated once. Every command also keeps a stable key
+    (``clave``) computed from the original names, so favourites do not break
+    when the language changes.
     """
     if idioma not in IDIOMAS or idioma == BASE:
         for categoria in datos.get("categorias", []):

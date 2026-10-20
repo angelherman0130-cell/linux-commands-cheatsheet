@@ -212,8 +212,8 @@ def fila_lateral(
 ) -> Gtk.ListBoxRow:
     """Sidebar row (favourites or categories).
 
-    La navegación se resuelve en la barra lateral con ``row-activated``;
-    aquí solo se prepara el contenido.
+    Navigation is handled by the sidebar through ``row-activated``;
+    here we only build the content.
     """
     fila = Gtk.ListBoxRow()
     fila.set_activatable(True)

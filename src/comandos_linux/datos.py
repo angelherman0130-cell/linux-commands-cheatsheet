@@ -90,7 +90,7 @@ def ruta_datos() -> Path:
         if ruta.is_file():
             return ruta
     raise FileNotFoundError(
-        "No se encontró comandos.json. Rutas probadas:\n  "
+        "comandos.json not found. Paths tried:\n  "
         + "\n  ".join(str(r) for r in _candidatos())
     )
 
@@ -114,7 +114,7 @@ def filtrar(
 ) -> list[dict[str, Any]]:
     """Filters categories/groups/commands.
 
-    - `texto`: busca en comando, descripción, ejemplo, variantes y nombres.
+    - `texto`: searches the command, description, example, variants and names.
     - `distro`: "todas" muestra las tres variantes; "d"/"f"/"a" solo la suya.
     """
     texto = (texto or "").strip().lower()

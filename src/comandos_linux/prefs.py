@@ -1,7 +1,7 @@
 """Persistent preferences: favourites, last view and active family.
 
 Se guardan en ``~/.config/linux-commands-cheatsheet/estado.json`` para que la
-app retome donde quedó la última vez.
+app picks up where you left it.
 """
 
 from __future__ import annotations
