@@ -44,7 +44,7 @@ code{font:13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:v
 .v code.x{flex:1;min-width:0;white-space:pre-wrap;word-break:break-word;font-size:12px}
 .p{color:#B3541E;font-size:12px;margin:0 0 4px 6px}
 @media (prefers-color-scheme:dark){.p{color:#F0A868}}
-#t[data-f="u"] .v:not([data-k="u"]),#t[data-f="f"] .v:not([data-k="f"]),#t[data-f="a"] .v:not([data-k="a"]){display:none}
+#t[data-f="d"] .v:not([data-k="d"]),#t[data-f="f"] .v:not([data-k="f"]),#t[data-f="a"] .v:not([data-k="a"]){display:none}
 #q{width:100%;font:inherit;font-size:14px;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;margin-bottom:10px}
 #q:focus{outline:2px solid var(--ac);outline-offset:-1px}
 .hidden{display:none!important}
@@ -52,7 +52,7 @@ code{font:13px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:v
 </style></head><body><main>
 <h1 id="titulo">__TITULO__</h1><p class="sub" id="sub">__SUBTITULO__</p>
 <input id="q" type="search" placeholder="Buscar comando, descripción o ejemplo…" autocomplete="off">
-<div class="seg" id="s"><button class="on" data-f="">__TODAS__</button><button data-f="u">Ubuntu</button><button data-f="f">Fedora</button><button data-f="a">Arch</button></div>
+<div class="seg" id="s"><button class="on" data-f="">__TODAS__</button><button data-f="d">Debian</button><button data-f="f">Fedora</button><button data-f="a">Arch</button></div>
 <div class="seg" id="l"><button class="on" data-l="es">Español</button><button data-l="en">English</button></div>
 <p class="note" id="nota">__NOTA__</p>
 <div class="bar"><button id="ex">Expandir todo</button><button id="co">Contraer todo</button></div>
@@ -78,7 +78,7 @@ function render(){
     g.comandos.forEach(function(m){
       h+='<div class="cmd"><code>'+e(m.cmd)+'</code><span>'+e(m.desc||'')+'</span></div>';
       if(m.variantes){
-        h+=['u','f','a'].map(function(k){return m.variantes[k]?'<div class="v" data-k="'+k+'"><b>'+N[k]+'</b><code class="x">'+e(m.variantes[k])+'</code></div>':''}).join('');
+        h+=['d','f','a'].map(function(k){return m.variantes[k]?'<div class="v" data-k="'+k+'"><b>'+N[k]+'</b><code class="x">'+e(m.variantes[k])+'</code></div>':''}).join('');
       } else if(m.ejemplo){
         h+='<div class="ex">'+pre(m.ejemplo)+'</div>';
       }

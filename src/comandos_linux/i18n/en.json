@@ -49,7 +49,10 @@
     "todas": "All",
     "expandir": "Expand all",
     "contraer": "Collapse all",
-    "coincidencias": "categories match"
+    "coincidencias": "categories match",
+    "menu_detectar": "Detect my distro",
+    "aviso_detectada": "Using the {familia} commands",
+    "aviso_sin_deteccion": "Could not detect your distro"
   },
   "categorias": {
     "archivos": "Files and directories",

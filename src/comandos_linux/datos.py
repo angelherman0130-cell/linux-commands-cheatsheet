@@ -9,6 +9,54 @@ from typing import Any
 
 APP_ID = "io.github.angelherman0130.LinuxCommandsCheatsheet"
 
+# Familias de distribuciones: la clave del dataset y su nombre corto.
+FAMILIAS: dict[str, str] = {"d": "Debian", "f": "Fedora", "a": "Arch"}
+
+# Nombres completos, para tooltips y textos.
+FAMILIAS_LARGAS: dict[str, str] = {
+    "d": "Debian/Ubuntu",
+    "f": "Fedora/RHEL",
+    "a": "Arch",
+}
+
+# Palabras clave de /etc/os-release para detectar la familia del sistema.
+DETECCION: list[tuple[tuple[str, ...], str]] = [
+    (("arch", "manjaro", "endeavouros", "cachyos", "steamos"), "a"),
+    (("debian", "ubuntu", "mint", "pop", "zorin", "elementary", "kali"), "d"),
+    (("fedora", "rhel", "centos", "nobara", "rocky", "alma"), "f"),
+]
+
+
+def detectar_familia(ruta: str | Path | None = None) -> str | None:
+    """Detecta la familia de distribuciones del sistema (None si es desconocida).
+
+    Lee /etc/os-release y usa tanto ``ID`` como ``ID_LIKE`` para que
+    Omarchy (ID=omarchy, ID_LIKE=arch) se detecte como Arch.
+    """
+    try:
+        texto = Path(ruta or "/etc/os-release").read_text(encoding="utf-8")
+    except OSError:
+        return None
+
+    campos: dict[str, str] = {}
+    for linea in texto.splitlines():
+        if "=" in linea:
+            clave, valor = linea.split("=", 1)
+            campos[clave.strip()] = valor.strip().strip('"').lower()
+
+    candidatos = (
+        campos.get("ID", ""),
+        campos.get("ID_LIKE", ""),
+    )
+    for palabras, familia in DETECCION:
+        for candidato in candidatos:
+            if candidato in palabras:
+                return familia
+            for palabra in candidato.split():
+                if palabra in palabras:
+                    return familia
+    return None
+
 
 def _candidatos() -> list[Path]:
     """Rutas donde puede vivir `comandos.json`, en orden de prioridad."""
@@ -67,7 +115,7 @@ def filtrar(
     """Filtra categorías/grupos/comandos.
 
     - `texto`: busca en comando, descripción, ejemplo, variantes y nombres.
-    - `distro`: "todas" muestra las tres variantes; "u"/"f"/"a" solo la suya.
+    - `distro`: "todas" muestra las tres variantes; "d"/"f"/"a" solo la suya.
     """
     texto = (texto or "").strip().lower()
     salida: list[dict[str, Any]] = []
@@ -104,7 +152,7 @@ def variantes_visibles(cmd: dict[str, Any], distro: str) -> list[tuple[str, str]
         ejemplo = cmd.get("ejemplo")
         return [("", ejemplo)] if ejemplo else []
 
-    claves = ["u", "f", "a"] if distro == "todas" else [distro]
+    claves = ["d", "f", "a"] if distro == "todas" else [distro]
     return [(k, variantes[k]) for k in claves if k in variantes]
 
 

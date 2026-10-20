@@ -19,7 +19,13 @@ from . import vistas  # noqa: E402
 
 CSS = Path(__file__).with_name("estilo.css")
 
-DISTROS = [("todas", "Todas"), ("u", "Ubuntu"), ("f", "Fedora"), ("a", "Arch")]
+# (clave, etiqueta corta, tooltip con el nombre completo)
+DISTROS = [
+    ("todas", "Todas", "Show every variant"),
+    ("d", "Debian", "Debian/Ubuntu"),
+    ("f", "Fedora", "Fedora/RHEL"),
+    ("a", "Arch", "Arch"),
+]
 
 
 class ComandosApp(Adw.Application):
@@ -37,7 +43,13 @@ class ComandosApp(Adw.Application):
             self.idioma = i18n.BASE
         self.datos = i18n.aplicar(datos, self.idioma)
         self.ventana: "Ventana | None" = None
-        self.distro: str = prefs.valor("distro", "todas") or "todas"
+        self.familia_detectada: str | None = ds.detectar_familia()
+        guardada = prefs.valor("distro")
+        if guardada in ds.FAMILIAS or guardada == "todas":
+            self.distro: str = guardada
+        else:
+            # Primera ejecución: se usa la familia detectada del sistema.
+            self.distro = self.familia_detectada or "todas"
         self.favoritos: list[str] = prefs.favoritos()
         self.texto: str = ""
         self._registrar_acciones()
@@ -52,6 +64,7 @@ class ComandosApp(Adw.Application):
     def _registrar_acciones(self) -> None:
         acciones = {
             "buscar": self._accion_buscar,
+            "detectar": self._accion_detectar,
             "favoritos": self._accion_favoritos,
             "exportar-html": self._accion_exportar_html,
             "exportar-md": self._accion_exportar_md,
@@ -65,6 +78,10 @@ class ComandosApp(Adw.Application):
     def _accion_buscar(self, *_a) -> None:
         if self.ventana:
             self.ventana.focar_busqueda()
+
+    def _accion_detectar(self, *_a) -> None:
+        if self.ventana:
+            self.ventana.detectar_distro()
 
     def _accion_favoritos(self, *_a) -> None:
         if self.ventana:
@@ -172,9 +189,10 @@ class Ventana(Adw.ApplicationWindow):
 
         # Filtro global de distribución
         self.grupo_distro = Adw.ToggleGroup()
-        for clave, etiqueta in DISTROS:
+        for clave, etiqueta, detalle in DISTROS:
             toggle = Adw.Toggle(label=etiqueta)
             toggle.set_name(clave)
+            toggle.set_tooltip(detalle)
             self.grupo_distro.add(toggle)
         self.grupo_distro.set_active_name(self.app.distro)
         self.grupo_distro.connect("notify::active", self._al_cambiar_distro)
@@ -316,6 +334,9 @@ class Ventana(Adw.ApplicationWindow):
         navegacion = Gio.Menu()
         navegacion.append(t.get("menu_buscar", "Buscar…"), "app.buscar")
         navegacion.append(t.get("menu_favoritos", "Favoritos"), "app.favoritos")
+        navegacion.append(
+            t.get("menu_detectar", "Detectar mi distro"), "app.detectar"
+        )
         menu.append_section(None, navegacion)
 
         export = Gio.Menu()
@@ -384,6 +405,25 @@ class Ventana(Adw.ApplicationWindow):
                 self.boton_buscar.set_active(False)
                 return True
         return False
+
+    def detectar_distro(self) -> None:
+        """Vuelve al modo automático: usa la familia detectada del sistema."""
+        self.app.familia_detectada = ds.detectar_familia()
+        familia = self.app.familia_detectada
+        if familia is None:
+            self.app.distro = "todas"
+            self.aviso(self.t.get("aviso_sin_deteccion", "No se pudo detectar tu distro"))
+        else:
+            self.app.distro = familia
+            self.aviso(
+                self.t.get("aviso_detectada", "Usando los comandos de {familia}").format(
+                    familia=ds.FAMILIAS_LARGAS[familia]
+                )
+            )
+        prefs.guardar(distro=self.app.distro)
+        self.grupo_distro.set_active_name(self.app.distro)
+        self._rellenar()
+        self._actualizar_titulo()
 
     def recargar(self) -> None:
         """Recarga la ventana tras un cambio de idioma."""
@@ -739,7 +779,7 @@ class Ventana(Adw.ApplicationWindow):
             transient_for=self,
             application_name="Comandos Linux",
             application_icon="comandos-linux",
-            version="1.3.0",
+            version="1.4.0",
             developer="Angel Herman",
             comments=self.t.get(
                 "about_comentarios",

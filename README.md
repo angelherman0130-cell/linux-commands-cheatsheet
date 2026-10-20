@@ -47,6 +47,26 @@ muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver
 
 ![Avisos de comandos destructivos](docs/captura-peligro.png)
 
+## 🧭 Familias de distribuciones, no distribuciones
+
+De los 263 comandos, **234 son idénticos** en cualquier Linux y solo **29 cambian**
+según el gestor de paquetes. Por eso la app no pregunta "¿Ubuntu, Fedora o Arch?",
+sino **¿de qué familia es tu sistema?**:
+
+| Familia | Gestor | Sirve también a |
+|---|---|---|
+| **Debian/Ubuntu** | `apt`, `dpkg`, `ufw` | Debian, Mint, Pop!_OS, Zorin, elementary, Kali |
+| **Fedora/RHEL** | `dnf`, `firewall-cmd` | RHEL, Rocky, Alma, CentOS Stream, Nobara |
+| **Arch** | `pacman`, `nft` | Manjaro, EndeavourOS, SteamOS, CachyOS |
+
+**Y la detecta sola**: al abrir la app se lee `/etc/os-release` (`ID` e
+`ID_LIKE`) y se selecciona tu familia automáticamente. Si prefieres verla
+siempre, el menú ☰ tiene **«Detectar mi distro»** para volver al modo
+automático.
+
+El selector sigue mostrando 4 botones cortos (`Todas │ Debian │ Fedora │
+Arch`) para que quepan en la barra lateral; el nombre completo va en el tooltip.
+
 ## 🌍 Dos idiomas
 
 La app está **en español e inglés**: no solo los botones, también las
@@ -67,6 +87,7 @@ El HTML exportado lleva su propio selector de idioma y acepta el parámetro
 | | |
 |---|---|
 | 🧭 Barra lateral | Categorías con icono y nº de comandos, favoritos arriba y filtro de distro |
+| 🖧 Autodetección | Detecta tu familia de distro al abrir y selecciona sus comandos |
 | 🔍 Buscar | Escribe arriba; la vista cambia a resultados planos con su categoría |
 | ⭐ Favoritos | Estrella en cada comando; se guardan entre sesiones |
 | 📋 Copiar | Clic en el comando o en el ejemplo; el portapapeles se actualiza solo |
@@ -167,11 +188,11 @@ src/comandos_linux/datos/comandos.json
       "comandos": [
         { "cmd": "dig", "desc": "consultas DNS", "ejemplo": "dig example.com" },
 
-        // Si cambia según la distro, usa "variantes":
+        // Si cambia según la familia, usa "variantes":
         { "cmd": "wget", "desc": "descargas", "variantes": {
-          "u": "sudo apt install wget",
-          "f": "sudo dnf install wget",
-          "a": "sudo pacman -S wget"
+          "d": "sudo apt install wget",      // Debian / Ubuntu
+          "f": "sudo dnf install wget",      // Fedora / RHEL
+          "a": "sudo pacman -S wget"         // Arch
         }},
 
         // Si es destructivo, añade "peligro" y la app lo marcará con un aviso:
@@ -187,8 +208,8 @@ src/comandos_linux/datos/comandos.json
 - `cmd` → el comando (monoespaciado).
 - `desc` → descripción corta.
 - `ejemplo` → ejemplo de uso. Si empieza por `#` se muestra como comentario.
-- `variantes` → en lugar de `ejemplo` cuando el comando difiere por distro
-  (`u` = Ubuntu, `f` = Fedora, `a` = Arch).
+- `variantes` → en lugar de `ejemplo` cuando el comando difiere por familia
+  (`d` = Debian/Ubuntu, `f` = Fedora/RHEL, `a` = Arch).
 - `peligro` → texto de aviso para los comandos destructivos (opcional).
 - `icono` → cualquier icono del tema del sistema (`folder-symbolic`,
   `network-server-symbolic`, `edit-find-symbolic`…).
@@ -269,6 +290,11 @@ the commands you use most at hand. Live search shows flat results with the
 category of each match, one click copies any command or example, destructive
 commands are flagged with a warning, and the whole cheat sheet can be exported
 to a standalone HTML file or to Markdown.
+
+Because only 29 of the 263 commands actually change between distributions, the
+app works with **distribution families** (Debian/Ubuntu, Fedora/RHEL, Arch)
+instead of exact distros, and it **detects yours automatically** by reading
+`/etc/os-release` — so the right commands are already selected when you open it.
 
 The interface and every description ship in **Spanish and English**, switchable
 from the sidebar — and the choice is remembered between sessions. Search works

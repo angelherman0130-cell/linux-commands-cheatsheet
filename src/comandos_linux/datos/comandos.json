@@ -3,7 +3,7 @@
   "subtitulo": "Ubuntu · Fedora · Arch",
   "nota": "Los comandos con $ son iguales en las tres. Solo cambia cómo se instalan y los paquetes. En Arch no uses pacman -Sy solo: usa -Syu.",
   "distros": {
-    "u": "Ubuntu",
+    "d": "Debian",
     "f": "Fedora",
     "a": "Arch"
   },
@@ -190,9 +190,9 @@
               "cmd": "locate",
               "desc": "instalar e indexar",
               "variantes": {
-                "u": "sudo apt install plocate && sudo updatedb",
                 "f": "sudo dnf install plocate && sudo updatedb",
-                "a": "sudo pacman -S plocate && sudo updatedb"
+                "a": "sudo pacman -S plocate && sudo updatedb",
+                "d": "sudo apt install plocate && sudo updatedb"
               }
             }
           ]
@@ -514,7 +514,7 @@
             {
               "cmd": "sudo comando",
               "desc": "ejecutar como root",
-              "ejemplo": "sudo apt update"
+              "ejemplo": "sudo systemctl restart nginx"
             },
             {
               "cmd": "su - usuario",
@@ -653,18 +653,18 @@
               "cmd": "killall",
               "desc": "viene en psmisc",
               "variantes": {
-                "u": "sudo apt install psmisc",
                 "f": "sudo dnf install psmisc",
-                "a": "sudo pacman -S psmisc"
+                "a": "sudo pacman -S psmisc",
+                "d": "sudo apt install psmisc"
               }
             },
             {
               "cmd": "htop",
               "desc": "visor de procesos",
               "variantes": {
-                "u": "sudo apt install htop",
                 "f": "sudo dnf install htop",
-                "a": "sudo pacman -S htop"
+                "a": "sudo pacman -S htop",
+                "d": "sudo apt install htop"
               }
             }
           ]
@@ -810,9 +810,9 @@
               "cmd": "actualizar todo",
               "desc": "índice y paquetes",
               "variantes": {
-                "u": "sudo apt update && sudo apt upgrade",
                 "f": "sudo dnf upgrade",
-                "a": "sudo pacman -Syu"
+                "a": "sudo pacman -Syu",
+                "d": "sudo apt update && sudo apt upgrade"
               }
             }
           ]
@@ -824,27 +824,27 @@
               "cmd": "instalar",
               "desc": "paquete nuevo",
               "variantes": {
-                "u": "sudo apt install vlc",
                 "f": "sudo dnf install vlc",
-                "a": "sudo pacman -S vlc"
+                "a": "sudo pacman -S vlc",
+                "d": "sudo apt install vlc"
               }
             },
             {
               "cmd": "quitar",
               "desc": "desinstalar",
               "variantes": {
-                "u": "sudo apt remove vlc",
                 "f": "sudo dnf remove vlc",
-                "a": "sudo pacman -Rns vlc"
+                "a": "sudo pacman -Rns vlc",
+                "d": "sudo apt remove vlc"
               }
             },
             {
               "cmd": "archivo local",
               "desc": "ya descargado",
               "variantes": {
-                "u": "sudo apt install ./app.deb",
                 "f": "sudo dnf install ./app.rpm",
-                "a": "sudo pacman -U app.pkg.tar.zst"
+                "a": "sudo pacman -U app.pkg.tar.zst",
+                "d": "sudo apt install ./app.deb"
               }
             }
           ]
@@ -856,36 +856,36 @@
               "cmd": "buscar",
               "desc": "en los repos",
               "variantes": {
-                "u": "apt search vlc",
                 "f": "dnf search vlc",
-                "a": "pacman -Ss vlc"
+                "a": "pacman -Ss vlc",
+                "d": "apt search vlc"
               }
             },
             {
               "cmd": "info",
               "desc": "detalles",
               "variantes": {
-                "u": "apt show vlc",
                 "f": "dnf info vlc",
-                "a": "pacman -Si vlc"
+                "a": "pacman -Si vlc",
+                "d": "apt show vlc"
               }
             },
             {
               "cmd": "instalados",
               "desc": "listar",
               "variantes": {
-                "u": "apt list --installed",
                 "f": "dnf list --installed",
-                "a": "pacman -Q"
+                "a": "pacman -Q",
+                "d": "apt list --installed"
               }
             },
             {
               "cmd": "dueño de un archivo",
               "desc": "qué paquete lo trae",
               "variantes": {
-                "u": "dpkg -S /usr/bin/ping",
                 "f": "dnf provides /usr/bin/dig",
-                "a": "pacman -F dig   # antes: sudo pacman -Fy"
+                "a": "pacman -F dig   # antes: sudo pacman -Fy",
+                "d": "dpkg -S /usr/bin/ping"
               }
             }
           ]
@@ -897,9 +897,9 @@
               "cmd": "huérfanos y caché",
               "desc": "liberar espacio",
               "variantes": {
-                "u": "sudo apt autoremove && sudo apt clean",
                 "f": "sudo dnf autoremove && sudo dnf clean all",
-                "a": "sudo pacman -Rns $(pacman -Qdtq) && sudo pacman -Sc"
+                "a": "sudo pacman -Rns $(pacman -Qdtq) && sudo pacman -Sc",
+                "d": "sudo apt autoremove && sudo apt clean"
               }
             }
           ]
@@ -911,45 +911,45 @@
               "cmd": "git",
               "desc": "control de versiones",
               "variantes": {
-                "u": "sudo apt install git",
                 "f": "sudo dnf install git",
-                "a": "sudo pacman -S git"
+                "a": "sudo pacman -S git",
+                "d": "sudo apt install git"
               }
             },
             {
               "cmd": "curl",
               "desc": "descargas y APIs",
               "variantes": {
-                "u": "sudo apt install curl",
                 "f": "sudo dnf install curl",
-                "a": "sudo pacman -S curl"
+                "a": "sudo pacman -S curl",
+                "d": "sudo apt install curl"
               }
             },
             {
               "cmd": "jq",
               "desc": "consultar JSON",
               "variantes": {
-                "u": "sudo apt install jq",
                 "f": "sudo dnf install jq",
-                "a": "sudo pacman -S jq"
+                "a": "sudo pacman -S jq",
+                "d": "sudo apt install jq"
               }
             },
             {
               "cmd": "unzip",
               "desc": "descomprimir .zip",
               "variantes": {
-                "u": "sudo apt install unzip",
                 "f": "sudo dnf install unzip",
-                "a": "sudo pacman -S unzip"
+                "a": "sudo pacman -S unzip",
+                "d": "sudo apt install unzip"
               }
             },
             {
               "cmd": "rsync",
               "desc": "sincronizar carpetas",
               "variantes": {
-                "u": "sudo apt install rsync",
                 "f": "sudo dnf install rsync",
-                "a": "sudo pacman -S rsync"
+                "a": "sudo pacman -S rsync",
+                "d": "sudo apt install rsync"
               }
             }
           ]
@@ -1048,45 +1048,45 @@
               "cmd": "wget",
               "desc": "descargas",
               "variantes": {
-                "u": "sudo apt install wget",
                 "f": "sudo dnf install wget",
-                "a": "sudo pacman -S wget"
+                "a": "sudo pacman -S wget",
+                "d": "sudo apt install wget"
               }
             },
             {
               "cmd": "whois",
               "desc": "info de dominio",
               "variantes": {
-                "u": "sudo apt install whois",
                 "f": "sudo dnf install whois",
-                "a": "sudo pacman -S whois"
+                "a": "sudo pacman -S whois",
+                "d": "sudo apt install whois"
               }
             },
             {
               "cmd": "dig",
               "desc": "consultas DNS",
               "variantes": {
-                "u": "sudo apt install bind9-dnsutils",
                 "f": "sudo dnf install bind-utils",
-                "a": "sudo pacman -S bind"
+                "a": "sudo pacman -S bind",
+                "d": "sudo apt install bind9-dnsutils"
               }
             },
             {
               "cmd": "traceroute",
               "desc": "ruta hasta el host",
               "variantes": {
-                "u": "sudo apt install traceroute",
                 "f": "sudo dnf install traceroute",
-                "a": "sudo pacman -S traceroute"
+                "a": "sudo pacman -S traceroute",
+                "d": "sudo apt install traceroute"
               }
             },
             {
               "cmd": "netcat",
               "desc": "comprobar puertos",
               "variantes": {
-                "u": "sudo apt install netcat-openbsd",
                 "f": "sudo dnf install netcat",
-                "a": "sudo pacman -S netcat"
+                "a": "sudo pacman -S netcat",
+                "d": "sudo apt install netcat-openbsd"
               }
             }
           ]
@@ -1148,9 +1148,9 @@
               "cmd": "ufw status",
               "desc": "reglas del cortafuegos",
               "variantes": {
-                "u": "sudo ufw status",
                 "f": "sudo firewall-cmd --list-all",
-                "a": "sudo nft list ruleset"
+                "a": "sudo nft list ruleset",
+                "d": "sudo ufw status"
               }
             }
           ]
@@ -1399,9 +1399,9 @@
               "cmd": "man",
               "desc": "manuales",
               "variantes": {
-                "u": "sudo apt install man-db manpages",
                 "f": "sudo dnf install man-db man-pages",
-                "a": "sudo pacman -S man-db man-pages"
+                "a": "sudo pacman -S man-db man-pages",
+                "d": "sudo apt install man-db manpages"
               }
             }
           ]
@@ -1766,45 +1766,45 @@
               "cmd": "bat",
               "desc": "cat con colores",
               "variantes": {
-                "u": "sudo apt install bat",
                 "f": "sudo dnf install bat",
-                "a": "sudo pacman -S bat"
+                "a": "sudo pacman -S bat",
+                "d": "sudo apt install bat"
               }
             },
             {
               "cmd": "fd",
               "desc": "find moderno",
               "variantes": {
-                "u": "sudo apt install fd-find",
                 "f": "sudo dnf install fd",
-                "a": "sudo pacman -S fd"
+                "a": "sudo pacman -S fd",
+                "d": "sudo apt install fd-find"
               }
             },
             {
               "cmd": "ripgrep",
               "desc": "grep moderno",
               "variantes": {
-                "u": "sudo apt install ripgrep",
                 "f": "sudo dnf install ripgrep",
-                "a": "sudo pacman -S ripgrep"
+                "a": "sudo pacman -S ripgrep",
+                "d": "sudo apt install ripgrep"
               }
             },
             {
               "cmd": "fzf",
               "desc": "buscador interactivo",
               "variantes": {
-                "u": "sudo apt install fzf",
                 "f": "sudo dnf install fzf",
-                "a": "sudo pacman -S fzf"
+                "a": "sudo pacman -S fzf",
+                "d": "sudo apt install fzf"
               }
             },
             {
               "cmd": "eza",
               "desc": "ls moderno",
               "variantes": {
-                "u": "sudo apt install eza",
                 "f": "sudo dnf install eza",
-                "a": "sudo pacman -S eza"
+                "a": "sudo pacman -S eza",
+                "d": "sudo apt install eza"
               }
             }
           ]
