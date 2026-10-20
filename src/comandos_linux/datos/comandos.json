@@ -126,7 +126,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "folder-symbolic",
+      "slug": "archivos"
     },
     {
       "nombre": "SSH",
@@ -165,7 +167,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "network-server-symbolic",
+      "slug": "ssh"
     },
     {
       "nombre": "Redes",
@@ -247,7 +251,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "network-transmit-receive-symbolic",
+      "slug": "redes"
     },
     {
       "nombre": "Info del sistema",
@@ -361,7 +367,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "dialog-information-symbolic",
+      "slug": "info-sistema"
     },
     {
       "nombre": "Búsqueda",
@@ -405,7 +413,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "edit-find-symbolic",
+      "slug": "busqueda"
     },
     {
       "nombre": "Procesos",
@@ -469,7 +479,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "system-run-symbolic",
+      "slug": "procesos"
     },
     {
       "nombre": "Permisos",
@@ -514,7 +526,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "dialog-password-symbolic",
+      "slug": "permisos"
     },
     {
       "nombre": "Compresión",
@@ -579,7 +593,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "package-x-generic-symbolic",
+      "slug": "compresion"
     },
     {
       "nombre": "Atajos",
@@ -639,7 +655,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "input-keyboard-symbolic",
+      "slug": "atajos"
     },
     {
       "nombre": "Paquetes (cambia por distro)",
@@ -745,7 +763,9 @@
             }
           ]
         }
-      ]
+      ],
+      "icono": "system-software-install-symbolic",
+      "slug": "paquetes"
     }
   ]
 }

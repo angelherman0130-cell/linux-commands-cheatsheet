@@ -114,3 +114,19 @@ def total_comandos(datos: dict[str, Any]) -> int:
         for categoria in datos.get("categorias", [])
         for grupo in categoria.get("grupos", [])
     )
+
+
+def clave_de(categoria: str, grupo: str, cmd: str) -> str:
+    """Clave estable de un comando (se usa para los favoritos)."""
+    return f"{categoria}::{grupo}::{cmd}"
+
+
+def indice(datos: dict[str, Any]) -> dict[str, tuple[dict, dict, dict]]:
+    """Mapa clave -> (categoría, grupo, comando) de todos los comandos."""
+    salida: dict[str, tuple[dict, dict, dict]] = {}
+    for categoria in datos.get("categorias", []):
+        for grupo in categoria.get("grupos", []):
+            for cmd in grupo.get("comandos", []):
+                clave = clave_de(categoria["nombre"], grupo["nombre"], cmd["cmd"])
+                salida[clave] = (categoria, grupo, cmd)
+    return salida

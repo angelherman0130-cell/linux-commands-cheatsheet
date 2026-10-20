@@ -18,8 +18,10 @@ distribuciones (instalar paquetes, activar servicios, herramientas de red…)
 muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver.
 
 - **100 % offline** — no hace ni una sola petición de red.
-- **Búsqueda en vivo** por comando, descripción o ejemplo.
-- **Copiar al portapapeles** con un clic en cada comando.
+- **Barra lateral** con las categorías, iconos y contador de comandos.
+- **Búsqueda instantánea** por comando, descripción o ejemplo, con resultados planos.
+- **Favoritos ⭐**: marca los comandos que usas a diario y quedan guardados.
+- **Copiar al portapapeles** con un clic (en el comando o en su ejemplo).
 - **Modo oscuro/claro automático**, siguiendo el tema del sistema.
 - Los mismos datos se pueden exportar a **HTML** (standalone) y a **Markdown**.
 
@@ -27,11 +29,13 @@ muestran la variante de **Ubuntu**, **Fedora** o **Arch** y tú eliges cuál ver
 
 | | |
 |---|---|
-| 🔍 Buscar | Escribe en la barra superior; filtra al instante |
-| 🧩 Filtrar por distro | Ubuntu · Fedora · Arch · Todas |
-| 📋 Copiar | Botón en cada comando (o `Ctrl+C` sobre el ejemplo) |
-| ⌨️ Atajo | `Ctrl+F` enfoca la búsqueda, `Esc` la limpia |
+| 🧭 Barra lateral | Categorías con icono y nº de comandos, favoritos arriba y filtro de distro |
+| 🔍 Buscar | Escribe arriba; la vista cambia a resultados planos con su categoría |
+| ⭐ Favoritos | Estrella en cada comando; se guardan entre sesiones |
+| 📋 Copiar | Clic en el comando o en el ejemplo; el portapapeles se actualiza solo |
+| ⌨️ Atajos | `Ctrl+K` buscar · `Ctrl+1..9` ir a la categoría N · `Ctrl+C` copiar el seleccionado |
 | 📤 Exportar | A HTML autocontenido o a Markdown, desde el menú ☰ |
+| 🌓 Tema | Claro/oscuro automático según el sistema |
 
 ## 📦 Instalación
 
@@ -58,14 +62,6 @@ El instalador detecta tu distribución, instala las dependencias que falten
 > entrar, o reinicia el shell, y aparecerá. El comando `comandos-linux`
 > funciona siempre.
 
-### Acceso directo
-
-En Linux el equivalente al acceso directo de Windows es la **entrada del
-menú de aplicaciones**: se instala en `~/.local/share/applications/` y
-aparece en cualquier launcher (Spotlight, menú de Omarchy, GNOME, KDE…).
-Si tu escritorio muestra iconos en el escritorio, `./install.sh --escritorio`
-deja además un icono en `~/Desktop/` listo para doble clic.
-
 ### Dependencias
 
 | Distribución | Paquetes |
@@ -83,6 +79,14 @@ automáticamente al modo HTML y abre la chuleta en el navegador.
 ./uninstall.sh
 ```
 
+### Acceso directo
+
+En Linux el equivalente al acceso directo de Windows es la **entrada del
+menú de aplicaciones**: se instala en `~/.local/share/applications/` y
+aparece en cualquier launcher (Spotlight, menú de Omarchy, GNOME, KDE…).
+Si tu escritorio muestra iconos en el escritorio, `./install.sh --escritorio`
+deja además un icono en `~/Desktop/` listo para doble clic.
+
 ## 🚀 Uso
 
 ```bash
@@ -95,6 +99,15 @@ comandos-linux --version
 
 También puedes abrirla desde el menú de aplicaciones como **«Comandos Linux»**.
 
+### Atajos de teclado
+
+| Atajo | Acción |
+|---|---|
+| `Ctrl+K` / `Ctrl+F` | Enfocar el buscador |
+| `Esc` | Limpiar la búsqueda / cerrar el buscador |
+| `Ctrl+1` … `Ctrl+9` | Ir a la categoría N |
+| `Ctrl+C` | Copiar el resultado seleccionado |
+
 ## ✏️ Añadir o corregir comandos
 
 Todos los datos viven en **un solo archivo**:
@@ -106,6 +119,8 @@ src/comandos_linux/datos/comandos.json
 ```jsonc
 {
   "nombre": "Redes",
+  "icono": "network-transmit-receive-symbolic",   // icono del sistema
+  "slug": "redes",                                 // identificador interno
   "grupos": [
     {
       "nombre": "Instalar si falta",
@@ -129,6 +144,8 @@ src/comandos_linux/datos/comandos.json
 - `ejemplo` → ejemplo de uso. Si empieza por `#` se muestra como comentario.
 - `variantes` → en lugar de `ejemplo` cuando el comando difiere por distro
   (`u` = Ubuntu, `f` = Fedora, `a` = Arch).
+- `icono` → cualquier icono del tema del sistema (`folder-symbolic`,
+  `network-server-symbolic`, `edit-find-symbolic`…).
 
 Guarda el archivo, reinicia la app y listo: la app, el HTML y el Markdown se
 generan siempre desde esta misma fuente.
@@ -141,7 +158,9 @@ linux-commands-cheatsheet/
 ├── pyproject.toml                # metadatos (permite pip install .)
 ├── src/comandos_linux/
 │   ├── __main__.py               # CLI: --export-html, --export-md, --listar
-│   ├── app.py                    # ventana GTK4 + libadwaita
+│   ├── app.py                    # ventana: barra lateral + panel de contenido
+│   ├── vistas.py                 # constructores de widgets (filas, tarjetas, chips)
+│   ├── prefs.py                  # favoritos y preferencias persistentes
 │   ├── datos.py                  # carga, búsqueda y filtrado
 │   ├── exportar.py               # exportadores HTML y Markdown
 │   ├── estilo.css                # paleta y estilos
@@ -151,6 +170,9 @@ linux-commands-cheatsheet/
 │   └── iconos/comandos-linux.svg
 └── docs/                         # capturas para el README
 ```
+
+Los favoritos y la última categoría visitada se guardan en
+`~/.config/linux-commands-cheatsheet/estado.json` (se crea solo).
 
 ## 🛠️ Desarrollo
 
@@ -174,9 +196,11 @@ pip install -e .      # instala el comando `comandos-linux` en modo editable
 **Comandos Linux** is a native desktop app (GTK4 + libadwaita) that works
 completely offline. It bundles 91 Linux commands in 10 categories for Ubuntu,
 Fedora and Arch — including the distro-specific variants (package managers,
-service activation, network tools). It offers live search, a distro filter,
-one-click copy to the clipboard, automatic light/dark theming, and can export
-the whole cheat sheet to a standalone HTML file or to Markdown.
+service activation, network tools). The sidebar lists every category with its
+icon and command count, and a favourites section keeps the commands you use
+most at hand. Live search shows flat results with the category of each match,
+one click copies any command or example, and the whole cheat sheet can be
+exported to a standalone HTML file or to Markdown.
 
 The dataset lives in a single JSON file, so adding or fixing a command is a
 one-line edit — the app, the HTML export and the Markdown export are all

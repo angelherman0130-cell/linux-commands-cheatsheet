@@ -1,69 +1,133 @@
-/* Comandos Linux — hoja de estilo de la app (GTK4 + libadwaita) */
+/* Comandos Linux — sistema visual (GTK4 + libadwaita) */
 
 .cheatsheet {
   --brand: #185FA5;
   --brand-bg: #E6F1FB;
-  --guide: #d9d7cf;
-  --soft: #f4f3ee;
-  --dim: #5f5e5a;
+  --brand-line: rgba(24, 95, 165, 0.28);
+  --card: #FFFFFF;
+  --card-line: rgba(0, 0, 0, 0.09);
+  --chip-bg: #F1EFE9;
+  --chip-line: rgba(0, 0, 0, 0.08);
+  --dim: #6A6862;
+  --hover: rgba(0, 0, 0, 0.045);
+  --gold: #C88800;
 }
 
 .cheatsheet.dark {
   --brand: #85B7EB;
   --brand-bg: #0C447C;
-  --guide: #444441;
-  --soft: #32322f;
-  --dim: #b4b2a9;
+  --brand-line: rgba(133, 183, 235, 0.32);
+  --card: #2B2B28;
+  --card-line: rgba(255, 255, 255, 0.10);
+  --chip-bg: #35352F;
+  --chip-line: rgba(255, 255, 255, 0.09);
+  --dim: #ADABA2;
+  --hover: rgba(255, 255, 255, 0.06);
+  --gold: #F5C263;
 }
 
-.mono {
-  font-family: monospace;
+/* --- estructura ------------------------------------------------------- */
+
+.pagina {
+  padding: 18px 22px 28px 22px;
+}
+
+.tarjeta {
+  background-color: var(--card);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--card-line);
+  border-radius: 14px;
+  padding: 3px 2px;
+}
+
+.fila-tarjeta {
+  padding: 11px 14px;
+}
+
+.fila-separada {
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: var(--card-line);
+}
+
+.grupo-titulo {
   font-size: 13px;
+  font-weight: 600;
+  color: var(--dim);
+  margin-top: 6px;
+  margin-bottom: 2px;
 }
 
-.cmd-label {
+/* --- comandos --------------------------------------------------------- */
+
+.cmd-chip {
   font-family: monospace;
   font-size: 13px;
   font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 6px;
-  background-color: var(--soft);
-  color: var(--tx, inherit);
+  background-color: var(--chip-bg);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--chip-line);
+  border-radius: 7px;
+  padding: 3px 9px;
 }
 
-.desc {
+.chip-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+}
+
+.chip-btn:hover .cmd-chip {
+  background-color: var(--brand-bg);
+  border-color: var(--brand-line);
+  color: var(--brand);
+}
+
+.cmd-desc {
   font-size: 14px;
   color: var(--dim);
 }
 
-.example {
+.cmd-ruta {
+  font-size: 12px;
+  color: var(--dim);
+  margin-bottom: 2px;
+}
+
+.cmd-ejemplo {
   font-family: monospace;
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--brand);
-  padding-left: 2px;
 }
 
-.grp {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--dim);
-  margin-top: 4px;
+.ejemplo-btn {
+  background: none;
+  border: none;
+  padding: 1px 6px;
+  margin: 0;
+  min-height: 0;
+  min-width: 0;
+  border-radius: 6px;
 }
 
-.cat-title {
-  font-size: 16px;
-  font-weight: 600;
+.ejemplo-btn:hover {
+  background-color: var(--hover);
 }
 
-.count {
-  font-size: 12px;
-  color: var(--dim);
-  padding: 1px 8px;
-  border-radius: 999px;
-  background-color: var(--soft);
+.ejemplo-btn:hover .cmd-ejemplo {
+  color: var(--brand);
 }
 
-.distro-badge {
+.fila-ejemplos {
+  margin-left: 34px;
+}
+
+.insignia {
   font-size: 11px;
   font-weight: 600;
   color: var(--brand);
@@ -72,35 +136,97 @@
   padding: 1px 8px;
 }
 
-.nota {
-  font-size: 13px;
+.icono-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  margin: 0;
+  min-width: 26px;
+  min-height: 26px;
+  border-radius: 7px;
   color: var(--dim);
+  opacity: 0.6;
 }
 
-.tree-body {
-  margin-left: 6px;
-  padding-left: 14px;
-  border-left-width: 1px;
-  border-left-style: solid;
-  border-left-color: var(--guide);
-}
-
-.cmd {
-  padding: 3px 0;
-}
-
-.copy-btn {
-  opacity: 0;
-  padding: 2px 4px;
-  min-width: 0;
-  min-height: 0;
-}
-
-.cmd-row:hover .copy-btn,
-.copy-btn:focus-visible {
+.icono-btn:hover {
+  background-color: var(--hover);
+  color: var(--brand);
   opacity: 1;
 }
 
-.searchbar {
-  min-width: 240px;
+.estrella-btn {
+  color: var(--dim);
+}
+
+.estrella-btn.marcado {
+  color: var(--gold);
+  opacity: 1;
+}
+
+/* --- barra lateral ---------------------------------------------------- */
+
+.lista-lateral {
+  background: none;
+  padding: 6px 8px 12px 8px;
+}
+
+.lateral-seccion {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--dim);
+  text-transform: uppercase;
+  margin: 14px 12px 4px 12px;
+}
+
+.fila-lateral {
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-bottom: 1px;
+}
+
+.fila-lateral:hover {
+  background-color: var(--hover);
+}
+
+.lateral-titulo {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.lateral-detalle {
+  font-size: 12px;
+  color: var(--dim);
+}
+
+.icono-lateral {
+  font-size: 16px;
+  color: var(--dim);
+  opacity: 0.85;
+}
+
+.filtro-distro {
+  margin: 0 10px 6px 10px;
+}
+
+/* --- estados vacíos --------------------------------------------------- */
+
+.estado-vacio {
+  padding: 24px;
+}
+
+.estado-icono {
+  font-size: 46px;
+  color: var(--dim);
+  opacity: 0.45;
+  margin-bottom: 4px;
+}
+
+.estado-titulo {
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.estado-texto {
+  font-size: 14px;
+  color: var(--dim);
 }
