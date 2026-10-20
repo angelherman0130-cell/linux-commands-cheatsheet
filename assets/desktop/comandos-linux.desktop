@@ -1,0 +1,16 @@
+[Desktop Entry]
+Type=Application
+Name=Comandos Linux
+Name[es]=Comandos Linux
+Name[en]=Linux Commands
+Comment=Chuleta de comandos Linux para Ubuntu, Fedora y Arch
+Comment[es]=Chuleta de comandos Linux para Ubuntu, Fedora y Arch (sin internet)
+Comment[en]=Linux command cheat sheet for Ubuntu, Fedora and Arch
+Exec=comandos-linux
+TryExec=comandos-linux
+Icon=comandos-linux
+Terminal=false
+StartupNotify=true
+StartupWMClass=io.github.angelherman0130.LinuxCommandsCheatsheet
+Categories=Utility;Education;Development;
+Keywords=linux;comandos;commands;terminal;consola;ubuntu;fedora;arch;cheatsheet;chuleta;
