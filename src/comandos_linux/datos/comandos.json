@@ -1,0 +1,751 @@
+{
+  "titulo": "Comandos Linux por distro",
+  "subtitulo": "Ubuntu · Fedora · Arch",
+  "nota": "Los comandos con $ son iguales en las tres. Solo cambia cómo se instalan y los paquetes. En Arch no uses pacman -Sy solo: usa -Syu.",
+  "distros": {
+    "u": "Ubuntu",
+    "f": "Fedora",
+    "a": "Arch"
+  },
+  "categorias": [
+    {
+      "nombre": "Archivos y directorios",
+      "grupos": [
+        {
+          "nombre": "Navegar",
+          "comandos": [
+            {
+              "cmd": "ls / ls -al",
+              "desc": "listar (-al: ocultos)",
+              "ejemplo": "ls -al ~/Documentos"
+            },
+            {
+              "cmd": "cd dir",
+              "desc": "cambiar de dir",
+              "ejemplo": "cd /var/log"
+            },
+            {
+              "cmd": "pwd",
+              "desc": "dir actual",
+              "ejemplo": "pwd   # /home/angel"
+            }
+          ]
+        },
+        {
+          "nombre": "Crear y borrar",
+          "comandos": [
+            {
+              "cmd": "mkdir dir",
+              "desc": "crear dir",
+              "ejemplo": "mkdir proyectos"
+            },
+            {
+              "cmd": "rmdir dir",
+              "desc": "borrar dir vacío",
+              "ejemplo": "rmdir carpeta_vacia"
+            },
+            {
+              "cmd": "rm file",
+              "desc": "borrar archivo",
+              "ejemplo": "rm notas.txt"
+            },
+            {
+              "cmd": "rm -r dir",
+              "desc": "borrar dir recursivo",
+              "ejemplo": "rm -r viejo/"
+            },
+            {
+              "cmd": "rm -f file",
+              "desc": "forzar borrado",
+              "ejemplo": "rm -f temporal.log"
+            },
+            {
+              "cmd": "rm -rf dir",
+              "desc": "recursivo y forzado",
+              "ejemplo": "rm -rf build/"
+            },
+            {
+              "cmd": "touch file",
+              "desc": "crear / actualizar fecha",
+              "ejemplo": "touch nuevo.txt"
+            }
+          ]
+        },
+        {
+          "nombre": "Copiar, mover, enlazar",
+          "comandos": [
+            {
+              "cmd": "cp f1 f2",
+              "desc": "copiar",
+              "ejemplo": "cp a.txt copia.txt"
+            },
+            {
+              "cmd": "mv f1 f2",
+              "desc": "mover / renombrar",
+              "ejemplo": "mv a.txt b.txt"
+            },
+            {
+              "cmd": "ln -s file link",
+              "desc": "enlace simbólico",
+              "ejemplo": "ln -s /opt/app/bin/app app"
+            }
+          ]
+        },
+        {
+          "nombre": "Ver contenido",
+          "comandos": [
+            {
+              "cmd": "cat file",
+              "desc": "mostrar todo",
+              "ejemplo": "cat /etc/hostname"
+            },
+            {
+              "cmd": "more file",
+              "desc": "paginado",
+              "ejemplo": "more registro.txt"
+            },
+            {
+              "cmd": "less file",
+              "desc": "paginado avanzado",
+              "ejemplo": "less /var/log/syslog"
+            },
+            {
+              "cmd": "head file",
+              "desc": "primeras 10 líneas",
+              "ejemplo": "head -n 5 datos.csv"
+            },
+            {
+              "cmd": "tail file",
+              "desc": "últimas 10 líneas",
+              "ejemplo": "tail -n 20 registro.txt"
+            },
+            {
+              "cmd": "tail -f file",
+              "desc": "seguir en vivo",
+              "ejemplo": "tail -f /var/log/syslog"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "SSH",
+      "grupos": [
+        {
+          "nombre": "Conexión",
+          "comandos": [
+            {
+              "cmd": "ssh user@host",
+              "desc": "conectar",
+              "ejemplo": "ssh angel@192.168.1.10"
+            },
+            {
+              "cmd": "ssh -p port user@host",
+              "desc": "con puerto",
+              "ejemplo": "ssh -p 2222 angel@servidor.com"
+            },
+            {
+              "cmd": "ssh -D port user@host",
+              "desc": "reenvío dinámico",
+              "ejemplo": "ssh -D 1080 angel@servidor.com"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar y activar",
+          "comandos": [
+            {
+              "cmd": "cliente + servidor",
+              "desc": "activar el servicio",
+              "variantes": {
+                "u": "sudo apt install openssh-client openssh-server && sudo systemctl enable --now ssh",
+                "f": "sudo dnf install openssh-clients openssh-server && sudo systemctl enable --now sshd",
+                "a": "sudo pacman -S openssh && sudo systemctl enable --now sshd"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Redes",
+      "grupos": [
+        {
+          "nombre": "Diagnóstico",
+          "comandos": [
+            {
+              "cmd": "ping host",
+              "desc": "probar conexión",
+              "ejemplo": "ping google.com"
+            },
+            {
+              "cmd": "whois domain",
+              "desc": "info del dominio",
+              "ejemplo": "whois example.com"
+            },
+            {
+              "cmd": "dig domain",
+              "desc": "DNS del dominio",
+              "ejemplo": "dig example.com"
+            },
+            {
+              "cmd": "dig -x host",
+              "desc": "búsqueda inversa",
+              "ejemplo": "dig -x 8.8.8.8"
+            }
+          ]
+        },
+        {
+          "nombre": "Descargas",
+          "comandos": [
+            {
+              "cmd": "wget file",
+              "desc": "descargar",
+              "ejemplo": "wget https://example.com/archivo.zip"
+            },
+            {
+              "cmd": "wget -r url",
+              "desc": "descarga recursiva",
+              "ejemplo": "wget -r https://example.com/docs/"
+            },
+            {
+              "cmd": "wget -c url",
+              "desc": "reanudar descarga",
+              "ejemplo": "wget -c https://example.com/disco.iso"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "wget",
+              "desc": "descargas",
+              "variantes": {
+                "u": "sudo apt install wget",
+                "f": "sudo dnf install wget",
+                "a": "sudo pacman -S wget"
+              }
+            },
+            {
+              "cmd": "whois",
+              "desc": "info de dominio",
+              "variantes": {
+                "u": "sudo apt install whois",
+                "f": "sudo dnf install whois",
+                "a": "sudo pacman -S whois"
+              }
+            },
+            {
+              "cmd": "dig",
+              "desc": "consultas DNS",
+              "variantes": {
+                "u": "sudo apt install bind9-dnsutils",
+                "f": "sudo dnf install bind-utils",
+                "a": "sudo pacman -S bind"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Info del sistema",
+      "grupos": [
+        {
+          "nombre": "Tiempo",
+          "comandos": [
+            {
+              "cmd": "date",
+              "desc": "fecha y hora",
+              "ejemplo": "date"
+            },
+            {
+              "cmd": "cal",
+              "desc": "calendario",
+              "ejemplo": "cal"
+            },
+            {
+              "cmd": "uptime",
+              "desc": "tiempo encendido",
+              "ejemplo": "uptime"
+            }
+          ]
+        },
+        {
+          "nombre": "Usuarios",
+          "comandos": [
+            {
+              "cmd": "w",
+              "desc": "quién está conectado",
+              "ejemplo": "w"
+            },
+            {
+              "cmd": "whoami",
+              "desc": "usuario actual",
+              "ejemplo": "whoami"
+            }
+          ]
+        },
+        {
+          "nombre": "Hardware y kernel",
+          "comandos": [
+            {
+              "cmd": "uname -a",
+              "desc": "config del kernel",
+              "ejemplo": "uname -a"
+            },
+            {
+              "cmd": "cat /proc/cpuinfo",
+              "desc": "CPU",
+              "ejemplo": "cat /proc/cpuinfo | grep 'model name'"
+            },
+            {
+              "cmd": "cat /proc/meminfo",
+              "desc": "memoria",
+              "ejemplo": "cat /proc/meminfo | head -3"
+            }
+          ]
+        },
+        {
+          "nombre": "Recursos",
+          "comandos": [
+            {
+              "cmd": "df -h",
+              "desc": "uso de disco",
+              "ejemplo": "df -h"
+            },
+            {
+              "cmd": "du -sh dir",
+              "desc": "tamaño de dir",
+              "ejemplo": "du -sh ~/Descargas"
+            },
+            {
+              "cmd": "free -h",
+              "desc": "uso de RAM",
+              "ejemplo": "free -h"
+            }
+          ]
+        },
+        {
+          "nombre": "Ayuda y ubicación",
+          "comandos": [
+            {
+              "cmd": "man command",
+              "desc": "manual",
+              "ejemplo": "man grep"
+            },
+            {
+              "cmd": "whereis app",
+              "desc": "binario, fuente, man",
+              "ejemplo": "whereis python3"
+            },
+            {
+              "cmd": "which app",
+              "desc": "cuál se ejecuta",
+              "ejemplo": "which python3"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "man",
+              "desc": "manuales",
+              "variantes": {
+                "u": "sudo apt install man-db manpages",
+                "f": "sudo dnf install man-db man-pages",
+                "a": "sudo pacman -S man-db man-pages"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Búsqueda",
+      "grupos": [
+        {
+          "nombre": "grep y locate",
+          "comandos": [
+            {
+              "cmd": "grep pattern file",
+              "desc": "buscar en archivo",
+              "ejemplo": "grep error registro.txt"
+            },
+            {
+              "cmd": "grep -r pattern dir",
+              "desc": "búsqueda recursiva",
+              "ejemplo": "grep -r 'TODO' src/"
+            },
+            {
+              "cmd": "cmd | grep pattern",
+              "desc": "filtrar salida",
+              "ejemplo": "ps aux | grep firefox"
+            },
+            {
+              "cmd": "locate file",
+              "desc": "buscar en base de datos",
+              "ejemplo": "locate informe.pdf"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "locate",
+              "desc": "instalar e indexar",
+              "variantes": {
+                "u": "sudo apt install plocate && sudo updatedb",
+                "f": "sudo dnf install plocate && sudo updatedb",
+                "a": "sudo pacman -S plocate && sudo updatedb"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Procesos",
+      "grupos": [
+        {
+          "nombre": "Ver",
+          "comandos": [
+            {
+              "cmd": "ps",
+              "desc": "procesos actuales",
+              "ejemplo": "ps"
+            },
+            {
+              "cmd": "ps aux",
+              "desc": "todos, en detalle",
+              "ejemplo": "ps aux"
+            }
+          ]
+        },
+        {
+          "nombre": "Terminar",
+          "comandos": [
+            {
+              "cmd": "kill pid",
+              "desc": "por PID",
+              "ejemplo": "kill 1234"
+            },
+            {
+              "cmd": "killall proc",
+              "desc": "por nombre",
+              "ejemplo": "killall firefox"
+            }
+          ]
+        },
+        {
+          "nombre": "Segundo plano",
+          "comandos": [
+            {
+              "cmd": "bg",
+              "desc": "reanudar en segundo plano",
+              "ejemplo": "bg   # después de Ctrl+Z"
+            },
+            {
+              "cmd": "fg",
+              "desc": "traer al primer plano",
+              "ejemplo": "fg"
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar si falta",
+          "comandos": [
+            {
+              "cmd": "killall",
+              "desc": "viene en psmisc",
+              "variantes": {
+                "u": "sudo apt install psmisc",
+                "f": "sudo dnf install psmisc",
+                "a": "sudo pacman -S psmisc"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Permisos",
+      "grupos": [
+        {
+          "nombre": "Cambiar",
+          "comandos": [
+            {
+              "cmd": "chmod octal file",
+              "desc": "cambiar permisos",
+              "ejemplo": "chmod 700 secreto.txt"
+            }
+          ]
+        },
+        {
+          "nombre": "Bits y orden",
+          "comandos": [
+            {
+              "cmd": "4 = r · 2 = w · 1 = x",
+              "desc": "lectura, escritura, ejecución",
+              "ejemplo": "# 6 = 4+2 → rw-"
+            },
+            {
+              "cmd": "owner / group / other",
+              "desc": "orden de los dígitos",
+              "ejemplo": "# 754 → rwx r-x r--"
+            }
+          ]
+        },
+        {
+          "nombre": "Ejemplos",
+          "comandos": [
+            {
+              "cmd": "chmod 755 file",
+              "desc": "rwxr-xr-x",
+              "ejemplo": "chmod 755 script.sh"
+            },
+            {
+              "cmd": "chmod 644 file",
+              "desc": "rw-r--r--",
+              "ejemplo": "chmod 644 notas.txt"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Compresión",
+      "grupos": [
+        {
+          "nombre": "tar",
+          "comandos": [
+            {
+              "cmd": "tar cf f.tar files",
+              "desc": "crear",
+              "ejemplo": "tar cf respaldo.tar fotos/"
+            },
+            {
+              "cmd": "tar xf f.tar",
+              "desc": "extraer",
+              "ejemplo": "tar xf respaldo.tar"
+            },
+            {
+              "cmd": "tar tf f.tar",
+              "desc": "listar",
+              "ejemplo": "tar tf respaldo.tar"
+            }
+          ]
+        },
+        {
+          "nombre": "Flags de tar",
+          "comandos": [
+            {
+              "cmd": "c · t · x",
+              "desc": "crear · listar · extraer",
+              "ejemplo": "tar cvf a.tar carpeta/"
+            },
+            {
+              "cmd": "f · z · j",
+              "desc": "archivo · gzip · bzip2",
+              "ejemplo": "tar czf a.tar.gz carpeta/"
+            },
+            {
+              "cmd": "k · T",
+              "desc": "no sobrescribir · desde archivo",
+              "ejemplo": "tar xkf a.tar"
+            },
+            {
+              "cmd": "w · v",
+              "desc": "confirmar · verboso",
+              "ejemplo": "tar xvf a.tar"
+            }
+          ]
+        },
+        {
+          "nombre": "gzip",
+          "comandos": [
+            {
+              "cmd": "gzip file",
+              "desc": "comprimir (.gz)",
+              "ejemplo": "gzip registro.txt"
+            },
+            {
+              "cmd": "gzip -d file.gz",
+              "desc": "descomprimir",
+              "ejemplo": "gzip -d registro.txt.gz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Atajos",
+      "grupos": [
+        {
+          "nombre": "Control",
+          "comandos": [
+            {
+              "cmd": "Ctrl+C",
+              "desc": "interrumpir",
+              "ejemplo": "ping google.com   # Ctrl+C para parar"
+            },
+            {
+              "cmd": "Ctrl+Z",
+              "desc": "detener",
+              "ejemplo": "sleep 100   # Ctrl+Z, luego bg"
+            },
+            {
+              "cmd": "Ctrl+D",
+              "desc": "salir (EOF)",
+              "ejemplo": "cat > nota.txt   # Ctrl+D guarda"
+            },
+            {
+              "cmd": "exit",
+              "desc": "cerrar sesión",
+              "ejemplo": "exit"
+            }
+          ]
+        },
+        {
+          "nombre": "Edición de línea",
+          "comandos": [
+            {
+              "cmd": "Ctrl+W",
+              "desc": "borrar palabra",
+              "ejemplo": "# borra la última palabra escrita"
+            },
+            {
+              "cmd": "Ctrl+U",
+              "desc": "borrar línea",
+              "ejemplo": "# borra toda la línea"
+            }
+          ]
+        },
+        {
+          "nombre": "Historial",
+          "comandos": [
+            {
+              "cmd": "Ctrl+R",
+              "desc": "buscar en historial",
+              "ejemplo": "# escribe ssh para buscar el último"
+            },
+            {
+              "cmd": "!!",
+              "desc": "repetir el último",
+              "ejemplo": "sudo !!   # repite con sudo"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nombre": "Paquetes (cambia por distro)",
+      "grupos": [
+        {
+          "nombre": "Actualizar",
+          "comandos": [
+            {
+              "cmd": "actualizar todo",
+              "desc": "índice y paquetes",
+              "variantes": {
+                "u": "sudo apt update && sudo apt upgrade",
+                "f": "sudo dnf upgrade",
+                "a": "sudo pacman -Syu"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Instalar y quitar",
+          "comandos": [
+            {
+              "cmd": "instalar",
+              "desc": "paquete nuevo",
+              "variantes": {
+                "u": "sudo apt install vlc",
+                "f": "sudo dnf install vlc",
+                "a": "sudo pacman -S vlc"
+              }
+            },
+            {
+              "cmd": "quitar",
+              "desc": "desinstalar",
+              "variantes": {
+                "u": "sudo apt remove vlc",
+                "f": "sudo dnf remove vlc",
+                "a": "sudo pacman -Rns vlc"
+              }
+            },
+            {
+              "cmd": "archivo local",
+              "desc": "ya descargado",
+              "variantes": {
+                "u": "sudo apt install ./app.deb",
+                "f": "sudo dnf install ./app.rpm",
+                "a": "sudo pacman -U app.pkg.tar.zst"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Consultar",
+          "comandos": [
+            {
+              "cmd": "buscar",
+              "desc": "en los repos",
+              "variantes": {
+                "u": "apt search vlc",
+                "f": "dnf search vlc",
+                "a": "pacman -Ss vlc"
+              }
+            },
+            {
+              "cmd": "info",
+              "desc": "detalles",
+              "variantes": {
+                "u": "apt show vlc",
+                "f": "dnf info vlc",
+                "a": "pacman -Si vlc"
+              }
+            },
+            {
+              "cmd": "instalados",
+              "desc": "listar",
+              "variantes": {
+                "u": "apt list --installed",
+                "f": "dnf list --installed",
+                "a": "pacman -Q"
+              }
+            },
+            {
+              "cmd": "dueño de un archivo",
+              "desc": "qué paquete lo trae",
+              "variantes": {
+                "u": "dpkg -S /usr/bin/ping",
+                "f": "dnf provides /usr/bin/dig",
+                "a": "pacman -F dig   # antes: sudo pacman -Fy"
+              }
+            }
+          ]
+        },
+        {
+          "nombre": "Limpieza",
+          "comandos": [
+            {
+              "cmd": "huérfanos y caché",
+              "desc": "liberar espacio",
+              "variantes": {
+                "u": "sudo apt autoremove && sudo apt clean",
+                "f": "sudo dnf autoremove && sudo dnf clean all",
+                "a": "sudo pacman -Rns $(pacman -Qdtq) && sudo pacman -Sc"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
