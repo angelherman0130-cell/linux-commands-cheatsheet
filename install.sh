@@ -19,7 +19,27 @@ aviso() { echo "${AMARILLO}::${FIN} $*"; }
 error() { echo "${ROJO}::${FIN} $*" >&2; }
 
 CON_DEPS=1
-[[ "${1:-}" == "--sin-deps" ]] && CON_DEPS=0
+ACCESO_DIRECTO=0
+
+uso() {
+  cat <<'EOF'
+Uso: ./install.sh [opciones]
+
+  --escritorio   Además crea un acceso directo en el Escritorio
+                 (solo útil en escritorios que muestran iconos: GNOME, KDE…)
+  --sin-deps     No intenta instalar dependencias del sistema
+  -h, --help     Muestra esta ayuda
+EOF
+}
+
+for arg in "$@"; do
+  case "$arg" in
+    --sin-deps)   CON_DEPS=0 ;;
+    --escritorio) ACCESO_DIRECTO=1 ;;
+    -h|--help)    uso; exit 0 ;;
+    *) aviso "Opción desconocida: $arg"; uso; exit 1 ;;
+  esac
+done
 
 echo
 echo "  Comandos Linux — instalador"
@@ -123,6 +143,19 @@ command -v update-desktop-database >/dev/null 2>&1 && \
   update-desktop-database "$APLICACIONES" >/dev/null 2>&1 || true
 command -v gtk-update-icon-cache >/dev/null 2>&1 && \
   gtk-update-icon-cache -f -t "$DATA_HOME/icons/hicolor" >/dev/null 2>&1 || true
+
+# --- 5b. acceso directo en el escritorio (opcional) ---------------------
+if [[ $ACCESO_DIRECTO -eq 1 ]]; then
+  ESCRITORIO="${XDG_DESKTOP_DIR:-$HOME/Desktop}"
+  mkdir -p "$ESCRITORIO"
+  ACCESO="$ESCRITORIO/Comandos Linux.desktop"
+  cp "$RAIZ/assets/desktop/comandos-linux.desktop" "$ACCESO"
+  chmod +x "$ACCESO"
+  # GNOME exige marcar el archivo como confiable para poder lanzarlo con doble clic.
+  command -v gio >/dev/null 2>&1 && \
+    gio set "$ACCESO" metadata::trusted true >/dev/null 2>&1 || true
+  info "Acceso directo en el escritorio: $ACCESO"
+fi
 
 # --- 6. comprobar -------------------------------------------------------
 echo

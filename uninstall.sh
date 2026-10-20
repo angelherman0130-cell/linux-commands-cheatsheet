@@ -12,6 +12,7 @@ rm -f  "$BIN_HOME/comandos-linux"
 rm -rf "$DATA_HOME/$NOMBRE"
 rm -f  "$DATA_HOME/applications/comandos-linux.desktop"
 rm -f  "$DATA_HOME/icons/hicolor/scalable/apps/comandos-linux.svg"
+rm -f  "${XDG_DESKTOP_DIR:-$HOME/Desktop}/Comandos Linux.desktop"
 
 command -v update-desktop-database >/dev/null 2>&1 && \
   update-desktop-database "$DATA_HOME/applications" >/dev/null 2>&1 || true

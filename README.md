@@ -45,10 +45,26 @@ El instalador detecta tu distribución, instala las dependencias que falten
 (solo pide `sudo` si de verdad son necesarias), deja el comando
 `comandos-linux` en el `PATH` y añade la entrada al menú de aplicaciones.
 
+### Opciones del instalador
+
+```bash
+./install.sh                 # instalación normal
+./install.sh --escritorio    # además crea el acceso directo en el Escritorio
+./install.sh --sin-deps      # no toca dependencias del sistema
+```
+
 > **¿No aparece en el menú?** Algunos lanzadores (como el Spotlight de Omarchy)
 > solo leen las entradas `.desktop` al arrancar. Cierra sesión y vuelve a
 > entrar, o reinicia el shell, y aparecerá. El comando `comandos-linux`
 > funciona siempre.
+
+### Acceso directo
+
+En Linux el equivalente al acceso directo de Windows es la **entrada del
+menú de aplicaciones**: se instala en `~/.local/share/applications/` y
+aparece en cualquier launcher (Spotlight, menú de Omarchy, GNOME, KDE…).
+Si tu escritorio muestra iconos en el escritorio, `./install.sh --escritorio`
+deja además un icono en `~/Desktop/` listo para doble clic.
 
 ### Dependencias
 
